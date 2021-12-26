@@ -1,5 +1,6 @@
 package com.boot.app.board.web.post;
 
+import com.boot.app.board.domain.post.Post;
 import com.boot.app.board.domain.post.PostService;
 import com.boot.app.board.web.common.validate.PostSaveValidator;
 import com.boot.app.board.web.post.dto.PostDetailDto;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.thymeleaf.model.IModel;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -28,16 +30,13 @@ public class PostController {
     private final PostService postService;
     private final PostSaveValidator postSaveValidator;
 
-  /*  @InitBinder
-    public void init(WebDataBinder dataBinder){
-        log.info("실행됨");
-        dataBinder.addValidators(postSaveValidator);
-    }*/
 
 
     @GetMapping
     public String posts(Model model) {
-        List<PostListDto> posts = postService.postList();
+        List<PostListDto> posts = postService.postList().stream().map(entity -> new PostListDto(entity)).collect(Collectors.toList());
+
+
         model.addAttribute("posts", posts);
         return "post/post_list";
     }
@@ -65,7 +64,14 @@ public class PostController {
 
 
         // postService.save(dto);
-        Long savePostId = postService.save(dto);
+        Post entity = Post.builder()
+                .title(dto.getTitle())
+                .content(dto.getContent())
+                .author(dto.getAuthor())
+                .number(dto.getNumber())
+                .build();
+
+        Long savePostId = postService.save(entity);
 
         redirectAttributes.addAttribute("postId", savePostId);
         redirectAttributes.addAttribute("status", true);
@@ -85,7 +91,9 @@ public class PostController {
     @GetMapping("/{postId}")
     public String post(@PathVariable Long postId, Model model) {
 
-        PostDetailDto post = postService.findByPostId(postId);
+        Post entity = postService.findByPostId(postId);
+        PostDetailDto post = new PostDetailDto(entity);
+
 
         model.addAttribute("post", post);
         return "post/post_detail";
@@ -94,7 +102,9 @@ public class PostController {
     @GetMapping("/{postId}/edit")
     public String editForm(@PathVariable Long postId, Model model) {
 
-        PostDetailDto post = postService.findByPostId(postId);
+        Post entity = postService.findByPostId(postId);
+
+        PostDetailDto post = new PostDetailDto(entity);
 
         model.addAttribute("post", post);
         return "post/post_edit_form";
@@ -117,7 +127,12 @@ public class PostController {
             return "post/post_edit_form";
         }
 
-        postService.updatePost(dto, postId);
+        Post entity = Post.builder()
+                .title(dto.getTitle())
+                .content(dto.getContent())
+                .build();
+
+        postService.updatePost(entity, postId);
 
         return "redirect:/post/{postId}";
     }

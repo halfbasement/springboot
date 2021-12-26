@@ -18,48 +18,37 @@ public class PostService {
 
     private final PostMapper postMapper;
 
-    public Long save(PostSaveDto dto){
-
-        Post entity = Post.builder()
-                .title(dto.getTitle())
-                .content(dto.getContent())
-                .author(dto.getAuthor())
-                .number(dto.getNumber())
-                .build();
-
+    public Long save(Post entity){
 
         postMapper.insertPost(entity);
-
 
         return entity.getPostId();
 
     }
 
-    public List<PostListDto> postList(){
+    public List<Post> postList(){
         List<Post> entities = postMapper.selectAllPosts();
 
-        return entities.stream().map(entity -> new PostListDto(entity)).collect(Collectors.toList());
+
+        return entities;
     }
 
-    public PostDetailDto findByPostId(Long postId){
+    public Post findByPostId(Long postId){
         Post entity = postMapper.findByPostId(postId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다 post_id=" + postId));
 
-        return new PostDetailDto(entity);
+        return entity;
     }
     public void deletePost(Long postId){
-
         postMapper.findByPostId(postId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다 post_id=" + postId));
 
         postMapper.deletePost(postId);
     }
 
-    public void updatePost(PostUpdateRequestDto dto, Long postId){
-        Post entity =  postMapper.findByPostId(postId)
+    public void updatePost(Post entity, Long postId){
+        postMapper.findByPostId(postId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다 post_id=" + postId));
-        entity.setTitle(dto.getTitle());
-        entity.setContent(dto.getContent());
 
         postMapper.updatePost(entity);
 
