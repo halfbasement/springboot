@@ -11,4 +11,12 @@
         values (#{email}, #{password}, #{name})
         ]]>
     </insert>
+
+    <select id="findByEmail" parameterType="String" resultType="Member">
+        <![CDATA[
+        SELECT *
+        FROM member
+        WHERE email=#{email}
+        ]]>
+    </select>
 </mapper>
