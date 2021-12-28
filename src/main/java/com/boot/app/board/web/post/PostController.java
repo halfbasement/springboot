@@ -127,6 +127,7 @@ public class PostController {
             return "post/post_edit_form";
         }
 
+        //컨버팅
         Post entity = Post.builder()
                 .title(dto.getTitle())
                 .content(dto.getContent())

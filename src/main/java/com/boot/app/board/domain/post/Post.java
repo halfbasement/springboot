@@ -16,5 +16,7 @@ public class Post {
     private Integer number;
     private Date regDate;
     private Date modifiedDate;
+    //fk
+    private String memberEmail;
 
 }

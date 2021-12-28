@@ -11,5 +11,6 @@
     </settings>
     <mappers>
         <mapper resource="mapper/post.xml"/>
+        <mapper resource="mapper/member.xml"/>
     </mappers>
 </configuration>
