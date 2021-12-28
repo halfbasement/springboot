@@ -6,13 +6,17 @@
     <div id="header">
         <div id="headerTitle">
             <a th:href="@{/}" >게시판</a>
+            <div id="headerLogin" style="float: right">
+                <button class="btn btn-success"
+                        th:onclick="|location.href='@{/login}'|"
+                        type="button">로그인</button>
+                <button class="btn btn-success"
+                        th:onclick="|location.href='@{/logout}'|"
+                        type="button">로그아웃</button>
+            </div>
         </div>
 
-        <div id="headerLogin" style="float: right">
-            <button class="w-100 btn btn-success btn-lg"
-                    th:onclick="|location.href='@{/login}'|"
-                    type="button">로그인</button>
-        </div>
+
     </div>
 </div>
 </html>

@@ -17,23 +17,28 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/login")
 public class LoginController {
 
     private final LoginService loginService;
 
-    @GetMapping
+    @GetMapping("/login")
     public String loginForm(Model model){
         model.addAttribute("login",new LoginDto());
         return "login/login_form";
     }
 
 
-    @PostMapping
-    public String login(@Validated @ModelAttribute("login") LoginDto dto, BindingResult bindingResult){
+    @PostMapping("/login")
+    public String login(@Validated @ModelAttribute("login") LoginDto dto, BindingResult bindingResult,
+                        HttpServletRequest request){
 
         //글로벌오류
         if ( !StringUtils.hasText(dto.getPassword()) &&  !StringUtils.hasText(dto.getEmail())) {
@@ -59,8 +64,21 @@ public class LoginController {
         }
 
 
+        //로그인 성공
+        HttpSession session = request.getSession(); // 세션이 있으면 있는 세션 반환 , 없으면 신규 세션 생성
+        session.setAttribute(SessionConst.LOGIN_MEMBER,loginResult);
+
+
         return "redirect:/";
     }
 
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request){
+        HttpSession session = request.getSession(false);
+        if(session!=null){
+            session.invalidate();
+        }
+        return "redirect:/";
+    }
 
 }

@@ -104,14 +104,14 @@ public class PostController {
 
         Post entity = postService.findByPostId(postId);
 
-        PostDetailDto post = new PostDetailDto(entity);
+        PostUpdateRequestDto post = new PostUpdateRequestDto(entity);
 
         model.addAttribute("post", post);
         return "post/post_edit_form";
     }
 
     @PostMapping("/{postId}/edit")
-    public String editForm(@PathVariable Long postId, @Validated @ModelAttribute("post") PostUpdateRequestDto dto, BindingResult bindingResult) {
+    public String editForm(@Validated @ModelAttribute("post") PostUpdateRequestDto dto, BindingResult bindingResult,@PathVariable Long postId) {
 
 
         //글로벌오류
@@ -129,6 +129,7 @@ public class PostController {
 
         //컨버팅
         Post entity = Post.builder()
+                .postId(postId)
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .build();
