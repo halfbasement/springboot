@@ -28,6 +28,7 @@ public class PostSaveDto {
     @NotBlank
     private String memberEmail;
 
+
     public PostSaveDto(Member member) {
         this.memberEmail = member.getEmail();
         this.author = member.getName();

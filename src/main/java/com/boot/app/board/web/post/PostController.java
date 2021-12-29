@@ -34,7 +34,6 @@ public class PostController {
     private final PostService postService;
 
 
-
     @GetMapping
     public String posts(Model model) {
         List<PostListDto> posts = postService.postList().stream().map(entity -> new PostListDto(entity)).collect(Collectors.toList());
@@ -47,9 +46,6 @@ public class PostController {
     @GetMapping("/save")
     public String saveForm(Model model , @SessionAttribute(name = SessionConst.LOGIN_MEMBER ,required = false)Member member) {
 
-        if(member == null){
-            return "redirect:/login";
-        }
 
         model.addAttribute("post", new PostSaveDto(member));
         return "post/post_save_form";

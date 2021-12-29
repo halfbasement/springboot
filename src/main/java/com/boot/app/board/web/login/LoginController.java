@@ -12,10 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -30,23 +27,23 @@ public class LoginController {
     private final LoginService loginService;
 
     @GetMapping("/login")
-    public String loginForm(Model model){
-        model.addAttribute("login",new LoginDto());
+    public String loginForm(Model model) {
+        model.addAttribute("login", new LoginDto());
         return "login/login_form";
     }
 
 
     @PostMapping("/login")
     public String login(@Validated @ModelAttribute("login") LoginDto dto, BindingResult bindingResult,
-                        HttpServletRequest request){
+                        HttpServletRequest request, @RequestParam(defaultValue = "/") String redirectURL) {
 
         //글로벌오류
-        if ( !StringUtils.hasText(dto.getPassword()) &&  !StringUtils.hasText(dto.getEmail())) {
+        if (!StringUtils.hasText(dto.getPassword()) && !StringUtils.hasText(dto.getEmail())) {
             bindingResult.reject("globalError");
         }
 
-        if(bindingResult.hasErrors()){
-            log.info("login error={}",bindingResult);
+        if (bindingResult.hasErrors()) {
+            log.info("login error={}", bindingResult);
             return "login/login_form";
         }
 
@@ -58,24 +55,24 @@ public class LoginController {
 
         Member loginResult = loginService.login(member);
 
-        if(loginResult==null){
-            bindingResult.reject("loginError","아이디 또는 비밀번호가 맞지 않습니다.");
+        if (loginResult == null) {
+            bindingResult.reject("loginError", "아이디 또는 비밀번호가 맞지 않습니다.");
             return "login/login_form";
         }
 
 
         //로그인 성공
         HttpSession session = request.getSession(); // 세션이 있으면 있는 세션 반환 , 없으면 신규 세션 생성
-        session.setAttribute(SessionConst.LOGIN_MEMBER,loginResult);
+        session.setAttribute(SessionConst.LOGIN_MEMBER, loginResult);
 
 
-        return "redirect:/";
+        return "redirect:" + redirectURL;
     }
 
-    @GetMapping("/logout")
-    public String logout(HttpServletRequest request){
+    @PostMapping("/logout")//상태 변경이라 Post
+    public String logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        if(session!=null){
+        if (session != null) {
             session.invalidate();
         }
         return "redirect:/";
