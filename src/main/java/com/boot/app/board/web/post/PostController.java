@@ -1,8 +1,10 @@
 package com.boot.app.board.web.post;
 
+import com.boot.app.board.domain.member.Member;
 import com.boot.app.board.domain.post.Post;
 import com.boot.app.board.domain.post.PostService;
 import com.boot.app.board.web.common.validate.PostSaveValidator;
+import com.boot.app.board.web.login.SessionConst;
 import com.boot.app.board.web.post.dto.PostDetailDto;
 import com.boot.app.board.web.post.dto.PostListDto;
 import com.boot.app.board.web.post.dto.PostSaveDto;
@@ -18,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.thymeleaf.model.IModel;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,7 +32,6 @@ import java.util.stream.Collectors;
 public class PostController {
 
     private final PostService postService;
-    private final PostSaveValidator postSaveValidator;
 
 
 
@@ -42,8 +45,13 @@ public class PostController {
     }
 
     @GetMapping("/save")
-    public String saveForm(Model model) {
-        model.addAttribute("post", new PostSaveDto());
+    public String saveForm(Model model , @SessionAttribute(name = SessionConst.LOGIN_MEMBER ,required = false)Member member) {
+
+        if(member == null){
+            return "redirect:/login";
+        }
+
+        model.addAttribute("post", new PostSaveDto(member));
         return "post/post_save_form";
     }
 
@@ -69,6 +77,7 @@ public class PostController {
                 .content(dto.getContent())
                 .author(dto.getAuthor())
                 .number(dto.getNumber())
+                .memberEmail(dto.getMemberEmail())
                 .build();
 
         Long savePostId = postService.save(entity);
@@ -81,7 +90,9 @@ public class PostController {
     }
 
     @GetMapping("/{postId}/remove")
-    public String remove(@PathVariable Long postId) {
+    public String remove(@PathVariable Long postId, @SessionAttribute(name = SessionConst.LOGIN_MEMBER ,required = false)Member member) {
+
+
 
         postService.deletePost(postId);
 

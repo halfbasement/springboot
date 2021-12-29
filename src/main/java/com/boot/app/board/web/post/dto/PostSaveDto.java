@@ -1,9 +1,7 @@
 package com.boot.app.board.web.post.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import com.boot.app.board.domain.member.Member;
+import lombok.*;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotBlank;
@@ -11,6 +9,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class PostSaveDto {
 
     @NotBlank
@@ -26,4 +25,11 @@ public class PostSaveDto {
     @Range(min=10,max = 1000)
     private Integer number;
 
+    @NotBlank
+    private String memberEmail;
+
+    public PostSaveDto(Member member) {
+        this.memberEmail = member.getEmail();
+        this.author = member.getName();
+    }
 }

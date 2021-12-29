@@ -22,8 +22,8 @@
 
     <insert id="insertPost" parameterType="Post">
         <![CDATA[
-        insert into post(title, content, author , number)
-        values (#{title}, #{content}, #{author} , #{number})
+        insert into post(title, content, author , number,member_email)
+        values (#{title}, #{content}, #{author} , #{number},#{memberEmail})
         ]]>
 
         <selectKey keyProperty="postId" resultType="Long" order="AFTER">
