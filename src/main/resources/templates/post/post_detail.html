@@ -34,21 +34,32 @@
 
     <hr class="my-4">
     <div class="row">
+
+
+        <th:block th:if="${member?.email != null } and ${post.author} == ${member.email}">
         <div class="col">
             <button class="w-100 btn btn-primary btn-lg"
                     th:onclick="|location.href='@{/post/{postId}/edit(postId=${post.postId})}'|"
                     type="button">글 수정</button>
         </div>
+        </th:block>
+
+
         <div class="col">
             <button class="w-100 btn btn-secondary btn-lg"
                     th:onclick="|location.href='@{/post}'|"
                     type="button">목록으로</button>
         </div>
+
+
+        <th:block th:if="${member?.email != null } and ${post.author} == ${member.email}">
         <div class="col">
             <button class="w-100 btn btn-danger btn-lg"
                     th:onclick="|location.href='@{/post/{postId}/remove(postId=${post.postId})}'|"
                     type="button">글 삭제</button>
         </div>
+        </th:block>
+
     </div>
 
 </div>

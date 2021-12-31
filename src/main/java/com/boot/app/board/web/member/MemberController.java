@@ -2,6 +2,7 @@ package com.boot.app.board.web.member;
 
 import com.boot.app.board.domain.member.Member;
 import com.boot.app.board.domain.member.MemberService;
+import com.boot.app.board.web.login.dto.LoginDto;
 import com.boot.app.board.web.member.dto.MemberSaveDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 @Slf4j
 @RequiredArgsConstructor
 @Controller
@@ -29,18 +32,20 @@ public class MemberController {
     }
 
     @PostMapping("/add")
-    public String saveMember(@Validated @ModelAttribute("member") MemberSaveDto dto, BindingResult bindingResult){
+    public String saveMember(@Validated @ModelAttribute("member") MemberSaveDto dto, BindingResult bindingResult,
+                            RedirectAttributes redirectAttributes){
 
         //글로벌오류
         if ( !StringUtils.hasText(dto.getPassword()) && !StringUtils.hasText(dto.getEmail()) && !StringUtils.hasText(dto.getName())) {
             bindingResult.reject("globalError");
         }
 
-        String memberEmail = memberService.validateEmail(dto.getEmail());
+        //아이디가 중복이면 true
+        boolean memberCheck = memberService.validateEmail(dto.getEmail());
+        log.info("memberCheck={}",memberCheck);
 
-        //아이디가 중복이면
-        if(memberEmail.contentEquals(dto.getEmail())){
-            log.info("중복된 이메일 memberId={} , formId={}",memberEmail,dto.getEmail());
+        if(memberCheck){
+            log.info("중복된 이메일  formId={}",dto.getEmail());
 
             bindingResult.rejectValue("email","sameEmail");
         }
@@ -66,8 +71,11 @@ public class MemberController {
                 .password(dto.getPassword())
                 .build();
 
-        memberService.save(member);
+         memberService.save(member);
 
-        return  "redirect:/";
+
+
+
+        return  "redirect:/login";
     }
 }

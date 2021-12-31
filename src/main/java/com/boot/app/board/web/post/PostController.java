@@ -88,21 +88,23 @@ public class PostController {
     @GetMapping("/{postId}/remove")
     public String remove(@PathVariable Long postId, @SessionAttribute(name = SessionConst.LOGIN_MEMBER ,required = false)Member member) {
 
+        Post post = postService.findByPostId(postId);
 
-
-        postService.deletePost(postId);
-
+        if(post.getAuthor()==member.getEmail()){
+            postService.deletePost(postId);
+        }
         return "redirect:/post";
     }
 
     @GetMapping("/{postId}")
-    public String post(@PathVariable Long postId, Model model) {
+    public String post(@PathVariable Long postId, Model model ,@SessionAttribute(name = SessionConst.LOGIN_MEMBER,required = false)Member member) {
 
         Post entity = postService.findByPostId(postId);
         PostDetailDto post = new PostDetailDto(entity);
 
 
         model.addAttribute("post", post);
+        model.addAttribute("member",member);
         return "post/post_detail";
     }
 
@@ -118,7 +120,8 @@ public class PostController {
     }
 
     @PostMapping("/{postId}/edit")
-    public String editForm(@Validated @ModelAttribute("post") PostUpdateRequestDto dto, BindingResult bindingResult,@PathVariable Long postId) {
+    public String editForm(@Validated @ModelAttribute("post") PostUpdateRequestDto dto, BindingResult bindingResult,@PathVariable Long postId,
+                           @SessionAttribute(name = SessionConst.LOGIN_MEMBER , required = false)Member member) {
 
 
         //글로벌오류
@@ -141,7 +144,11 @@ public class PostController {
                 .content(dto.getContent())
                 .build();
 
-        postService.updatePost(entity, postId);
+        Post post = postService.findByPostId(postId);
+
+        if(post.getAuthor() == member.getEmail()) {
+            postService.updatePost(entity, postId);
+        }
 
         return "redirect:/post/{postId}";
     }
