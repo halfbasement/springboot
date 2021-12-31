@@ -31,6 +31,6 @@ public class PostSaveDto {
 
     public PostSaveDto(Member member) {
         this.memberEmail = member.getEmail();
-        this.author = member.getName();
+        this.author = member.getEmail();
     }
 }

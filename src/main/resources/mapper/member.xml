@@ -19,4 +19,12 @@
         WHERE email=#{email}
         ]]>
     </select>
+
+    <select id="validateEmail" parameterType="String" resultType="String">
+        <![CDATA[
+        SELECT email
+        FROM member
+        WHERE email=#{email}
+        ]]>
+    </select>
 </mapper>

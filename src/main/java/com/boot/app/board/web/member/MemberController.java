@@ -36,6 +36,17 @@ public class MemberController {
             bindingResult.reject("globalError");
         }
 
+        String memberEmail = memberService.validateEmail(dto.getEmail());
+
+        //아이디가 중복이면
+        if(memberEmail.contentEquals(dto.getEmail())){
+            log.info("중복된 이메일 memberId={} , formId={}",memberEmail,dto.getEmail());
+
+            bindingResult.rejectValue("email","sameEmail");
+        }
+
+
+
         if(!dto.getPassword().contentEquals(dto.getPasswordConfirm())){
 
             log.info("password={},passwordConfirm ={}",dto.getPassword(),dto.getPasswordConfirm());
