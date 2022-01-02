@@ -5,13 +5,23 @@
 
 <mapper namespace="com.boot.app.board.domain.post.PostMapper">
 
-    <select id="selectAllPosts" resultType="Post">
+    <select id="selectAllPosts" parameterType="Paging"  resultType="Post">
         <![CDATA[
         SELECT *
         FROM post
+        ORDER BY post_id DESC,reg_date DESC
+        LIMIT #{startPost},#{endPost}
         ]]>
     </select>
 
+
+
+    <select id="postCount" resultType="int">
+           <![CDATA[
+        SELECT COUNT(*)
+        FROM post
+        ]]>
+    </select>
     <select id="findByPostId" parameterType="Long" resultType="Post">
         <![CDATA[
         SELECT *

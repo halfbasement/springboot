@@ -1,6 +1,7 @@
 package com.boot.app.board.web.post;
 
 import com.boot.app.board.domain.member.Member;
+import com.boot.app.board.domain.page.Paging;
 import com.boot.app.board.domain.post.Post;
 import com.boot.app.board.domain.post.PostService;
 import com.boot.app.board.web.common.validate.PostSaveValidator;
@@ -34,12 +35,24 @@ public class PostController {
     private final PostService postService;
 
 
-    @GetMapping
-    public String posts(Model model) {
-        List<PostListDto> posts = postService.postList().stream().map(entity -> new PostListDto(entity)).collect(Collectors.toList());
+    @GetMapping()
+    public String posts(@RequestParam Integer pageNum ,Model model) {
+
+
+        log.info("count={}",postService.pageCount());
+
+        Integer pageCount = postService.pageCount();
+        Paging paging = new Paging(pageNum);
+
+
+        List<PostListDto> posts = postService.postList(paging)
+                .stream()
+                .map(entity -> new PostListDto(entity))
+                .collect(Collectors.toList());
 
 
         model.addAttribute("posts", posts);
+        model.addAttribute("page",pageCount);
         return "post/post_list";
     }
 
