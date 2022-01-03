@@ -1,10 +1,9 @@
 package com.boot.app.board.web.post;
 
 import com.boot.app.board.domain.member.Member;
-import com.boot.app.board.domain.page.Paging;
+import com.boot.app.board.domain.paging.Criteria;
 import com.boot.app.board.domain.post.Post;
 import com.boot.app.board.domain.post.PostService;
-import com.boot.app.board.web.common.validate.PostSaveValidator;
 import com.boot.app.board.web.login.SessionConst;
 import com.boot.app.board.web.post.dto.PostDetailDto;
 import com.boot.app.board.web.post.dto.PostListDto;
@@ -19,10 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.thymeleaf.model.IModel;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,23 +32,25 @@ public class PostController {
 
 
     @GetMapping()
-    public String posts(@RequestParam Integer pageNum ,Model model) {
+    public String posts(@ModelAttribute("criteria")Criteria criteria, Model model) {
 
 
-        log.info("count={}",postService.pageCount());
-
-        Integer pageCount = postService.pageCount();
-        Paging paging = new Paging(pageNum);
 
 
-        List<PostListDto> posts = postService.postList(paging)
+
+
+      /*  List<PostListDto> posts = postService.postList()
                 .stream()
                 .map(entity -> new PostListDto(entity))
                 .collect(Collectors.toList());
-
+*/
+        //페이징
+        log.info("count={}",postService.pageCount());
+        Integer pageCount = postService.pageCount();
+        List<Post> posts = postService.postPageList(criteria);
+        model.addAttribute("page",criteria);
 
         model.addAttribute("posts", posts);
-        model.addAttribute("page",pageCount);
         return "post/post_list";
     }
 
@@ -103,7 +101,7 @@ public class PostController {
 
         Post post = postService.findByPostId(postId);
 
-        if(post.getAuthor()==member.getEmail()){
+        if(post.getAuthor().contentEquals(member.getEmail())){
             postService.deletePost(postId);
         }
         return "redirect:/post";
@@ -159,7 +157,7 @@ public class PostController {
 
         Post post = postService.findByPostId(postId);
 
-        if(post.getAuthor() == member.getEmail()) {
+        if(post.getAuthor().contentEquals(member.getEmail())) {
             postService.updatePost(entity, postId);
         }
 

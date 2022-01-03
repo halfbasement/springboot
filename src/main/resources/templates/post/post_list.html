@@ -35,11 +35,11 @@
             <div class="row">
                 <div class="col">
                     <ul class="pagination">
-                        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                            <div th:each="seq : ${#numbers.sequence(1,5)}">
-                                <li class="page-item"><a class="page-link" th:href="@{/post(pageNum=${seq})}" th:text="${seq}">1</a></li>
+
+                            <div th:each="seq : ${#numbers.sequence(1,9)}">
+                                <li class="page-item"><a class="page-link" th:href="@{/post(currentPageNo=${seq},recordsPerPage=20)}" th:text="${seq}">1</a></li>
                             </div>
-                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+
                     </ul>
                 </div>
             </div>

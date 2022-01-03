@@ -5,16 +5,31 @@
 
 <mapper namespace="com.boot.app.board.domain.post.PostMapper">
 
-    <select id="selectAllPosts" parameterType="Paging"  resultType="Post">
+    <!-- <select id="selectPagingPosts" parameterType="Paging"  resultType="Post">
+         <![CDATA[
+         SELECT *
+         FROM post
+         ORDER BY post_id DESC,reg_date DESC
+         LIMIT #{startPost},#{endPost}
+         ]]>
+     </select>
+ -->
+    <select id="selectAllPosts" resultType="Post">
         <![CDATA[
         SELECT *
         FROM post
-        ORDER BY post_id DESC,reg_date DESC
-        LIMIT #{startPost},#{endPost}
         ]]>
     </select>
 
 
+    <select id="selectPostList" parameterType="Criteria" resultType="Post">
+    <![CDATA[
+        SELECT *
+        FROM post
+        ORDER BY post_id DESC, reg_date DESC
+            LIMIT #{startPage}, #{recordsPerPage}
+        ]]>
+    </select>
 
     <select id="postCount" resultType="int">
            <![CDATA[
@@ -26,7 +41,7 @@
         <![CDATA[
         SELECT *
         FROM post
-        WHERE post_id=#{postId}
+        WHERE post_id = #{postId}
         ]]>
     </select>
 
@@ -43,15 +58,18 @@
 
     <delete id="deletePost" parameterType="Long">
          <![CDATA[
-        DELETE FROM post
-        WHERE post_id=#{postId}
+        DELETE
+        FROM post
+        WHERE post_id = #{postId}
         ]]>
     </delete>
 
     <update id="updatePost" parameterType="Post">
           <![CDATA[
         UPDATE post
-        SET title=#{title}, content=#{content},modified_date = now()
+        SET title=#{title},
+            content=#{content},
+            modified_date = now()
         WHERE post_id = #{postId}
         ]]>
     </update>
