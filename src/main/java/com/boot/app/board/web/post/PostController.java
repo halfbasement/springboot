@@ -36,14 +36,6 @@ public class PostController {
 
 
 
-
-
-
-      /*  List<PostListDto> posts = postService.postList()
-                .stream()
-                .map(entity -> new PostListDto(entity))
-                .collect(Collectors.toList());
-*/
         //페이징
         log.info("count={}",postService.pageCount());
         Integer pageCount = postService.pageCount();
