@@ -35,30 +35,48 @@
     <hr class="my-4">
     <th:block>
 
-
-        <div class="card mb-2">
-            <div class="card-header bg-light">
-                <i class="fa fa-comment fa"></i> REPLY
-            </div>
-            <div class="card-body">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
-                        <div class="form-inline mb-2">
-                            <label for="replyId"><i class="fa fa-user-circle-o fa-2x"></i></label>
-                            <input type="text" class="form-control ml-2" placeholder="Enter yourId" id="replyId">
-                            <label for="replyPassword" class="ml-4"><i class="fa fa-unlock-alt fa-2x"></i></label>
-                            <input type="password" class="form-control ml-2" placeholder="Enter password"
-                                   id="replyPassword">
+        <!-- Comments section-->
+        <section class="mb-5">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <!-- Comment form-->
+                    <form class="mb-4"><textarea class="form-control" rows="3" placeholder="Join the discussion and leave a comment!"></textarea></form>
+                    <!-- Comment with nested comments-->
+                    <div class="d-flex mb-4" style="text-align: left">
+                        <!-- Parent comment-->
+                        <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
+                        <div class="ms-3">
+                            <div class="fw-bold">Commenter Name</div>
+                            If you're going to lead a space frontier, it has to be government; it'll never be private enterprise. Because the space frontier is dangerous, and it's expensive, and it has unquantified risks.
+                            <!-- Child comment 1-->
+                            <div class="d-flex mt-4">
+                                <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
+                                <div class="ms-3">
+                                    <div class="fw-bold">Commenter Name</div>
+                                    And under those conditions, you cannot establish a capital-market evaluation of that enterprise. You can't get investors.
+                                </div>
+                            </div>
+                            <!-- Child comment 2-->
+                            <div class="d-flex mt-4">
+                                <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
+                                <div class="ms-3">
+                                    <div class="fw-bold">Commenter Name</div>
+                                    When you put money directly to a problem, it makes a good headline.
+                                </div>
+                            </div>
                         </div>
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                        <button type="button" class="btn btn-dark mt-3" onClick="javascript:addReply();">post reply
-                        </button>
-                    </li>
-                </ul>
+                    </div>
+                    <!-- Single comment-->
+                    <div class="d-flex">
+                        <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
+                        <div class="ms-3">
+                            <div class="fw-bold">Commenter Name</div>
+                            When I look at the universe and all the ways the universe wants to kill us, I find it hard to reconcile that with statements of beneficence.
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-
-
+        </section>
         <hr class="my-4">
     </th:block>
 
