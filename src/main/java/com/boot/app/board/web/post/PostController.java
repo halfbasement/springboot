@@ -1,5 +1,7 @@
 package com.boot.app.board.web.post;
 
+import com.boot.app.board.domain.comment.Comment;
+import com.boot.app.board.domain.comment.CommentService;
 import com.boot.app.board.domain.member.Member;
 import com.boot.app.board.domain.post.Post;
 import com.boot.app.board.domain.post.PostService;
@@ -27,7 +29,7 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
-
+    private final CommentService commentService;
 
     @GetMapping()
     public String posts(@ModelAttribute Post post, Model model) {
@@ -107,8 +109,12 @@ public class PostController {
         Post entity = postService.findByPostId(postId);
         PostDetailDto post = new PostDetailDto(entity);
 
+      //  List<Comment> comments = commentService.commentList(postId);
+
+
 
         model.addAttribute("post", post);
+      //  model.addAttribute("comments",comments);
         model.addAttribute("member",member);
         return "post/post_detail";
     }

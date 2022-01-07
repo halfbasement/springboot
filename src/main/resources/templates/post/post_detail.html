@@ -15,7 +15,7 @@
 
     <div>
         <label for="title">제목</label>
-        <input type="text" id="title" name="title" class="form-control"  th:value="${post.title}" readonly>
+        <input type="text" id="title" name="title" class="form-control" th:value="${post.title}" readonly>
     </div>
     <div>
         <label for="author">작성자</label>
@@ -23,7 +23,7 @@
     </div>
     <div>
         <label for="regDate">작성일</label>
-        <input type="text" id="regDate" name="regDate" class="form-control"  th:value="${post.regDate}" readonly>
+        <input type="text" id="regDate" name="regDate" class="form-control" th:value="${post.regDate}" readonly>
     </div>
 
     <div>
@@ -33,26 +33,59 @@
 
 
     <hr class="my-4">
+    <th:block>
+
+
+        <div class="card mb-2">
+            <div class="card-header bg-light">
+                <i class="fa fa-comment fa"></i> REPLY
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <div class="form-inline mb-2">
+                            <label for="replyId"><i class="fa fa-user-circle-o fa-2x"></i></label>
+                            <input type="text" class="form-control ml-2" placeholder="Enter yourId" id="replyId">
+                            <label for="replyPassword" class="ml-4"><i class="fa fa-unlock-alt fa-2x"></i></label>
+                            <input type="password" class="form-control ml-2" placeholder="Enter password"
+                                   id="replyPassword">
+                        </div>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        <button type="button" class="btn btn-dark mt-3" onClick="javascript:addReply();">post reply
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+        <hr class="my-4">
+    </th:block>
+
+
     <div class="row">
 
 
         <th:block th:if="${member?.email != null } and ${post.author} == ${member.email}">
-        <div class="col">
-            <button class="w-100 btn btn-primary btn-lg"
-                    th:onclick="|location.href='@{/post/{postId}/edit(postId=${post.postId})}'|"
-                    type="button">글 수정</button>
-        </div>
-        <div class="col">
-            <button class="w-100 btn btn-danger btn-lg"
-                    th:onclick="|location.href='@{/post/{postId}/remove(postId=${post.postId})}'|"
-                    type="button">글 삭제</button>
-        </div>
+            <div class="col">
+                <button class="w-100 btn btn-primary btn-lg"
+                        th:onclick="|location.href='@{/post/{postId}/edit(postId=${post.postId})}'|"
+                        type="button">글 수정
+                </button>
+            </div>
+            <div class="col">
+                <button class="w-100 btn btn-danger btn-lg"
+                        th:onclick="|location.href='@{/post/{postId}/remove(postId=${post.postId})}'|"
+                        type="button">글 삭제
+                </button>
+            </div>
         </th:block>
 
         <div class="col">
             <button class="w-100 btn btn-secondary btn-lg"
                     th:onclick="|location.href='@{/post}'|"
-                    type="button">목록으로</button>
+                    type="button">목록으로
+            </button>
         </div>
 
 

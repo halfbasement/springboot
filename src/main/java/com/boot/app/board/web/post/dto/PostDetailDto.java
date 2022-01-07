@@ -6,6 +6,9 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 @Getter
 public class PostDetailDto {
 
