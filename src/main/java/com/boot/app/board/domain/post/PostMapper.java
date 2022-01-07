@@ -1,6 +1,5 @@
 package com.boot.app.board.domain.post;
 
-import com.boot.app.board.domain.paging.Criteria;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -15,6 +14,6 @@ public interface PostMapper {
     void deletePost(Long postId);
     void updatePost(Post post);
 
-    List<Post> selectPostList(Criteria criteria);
+    List<Post> selectPostList(Post post);
     Integer postCount();
 }

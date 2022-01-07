@@ -22,7 +22,7 @@
     </select>
 
 
-    <select id="selectPostList" parameterType="Criteria" resultType="Post">
+    <select id="selectPostList" parameterType="Post" resultType="Post">
     <![CDATA[
         SELECT *
         FROM post

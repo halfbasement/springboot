@@ -1,12 +1,11 @@
 package com.boot.app.board.web.post;
 
 import com.boot.app.board.domain.member.Member;
-import com.boot.app.board.domain.paging.Criteria;
 import com.boot.app.board.domain.post.Post;
 import com.boot.app.board.domain.post.PostService;
 import com.boot.app.board.web.login.SessionConst;
 import com.boot.app.board.web.post.dto.PostDetailDto;
-import com.boot.app.board.web.post.dto.PostListDto;
+import com.boot.app.board.web.post.dto.PostRequestPagingDto;
 import com.boot.app.board.web.post.dto.PostSaveDto;
 import com.boot.app.board.web.post.dto.PostUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,15 +30,19 @@ public class PostController {
 
 
     @GetMapping()
-    public String posts(@ModelAttribute("criteria")Criteria criteria, Model model) {
+    public String posts(@ModelAttribute Post post, Model model) {
 
 
 
-        //페이징
+        /*
+        페이징
+
         log.info("count={}",postService.pageCount());
-        Integer pageCount = postService.pageCount();
-        List<Post> posts = postService.postPageList(criteria);
-        model.addAttribute("page",criteria);
+        Integer pageCount = postService.pageCount();*/
+
+
+
+        List<Post> posts = postService.postPageList(post);
 
         model.addAttribute("posts", posts);
         return "post/post_list";

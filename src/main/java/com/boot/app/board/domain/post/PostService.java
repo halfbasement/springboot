@@ -1,6 +1,5 @@
 package com.boot.app.board.domain.post;
 
-import com.boot.app.board.domain.paging.Criteria;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,8 +27,8 @@ public class PostService {
         return entities;
     }
 
-    public List<Post> postPageList(Criteria criteria){
-        List<Post> posts = postMapper.selectPostList(criteria);
+    public List<Post> postPageList(Post post){
+        List<Post> posts = postMapper.selectPostList(post);
         return posts;
     }
 
