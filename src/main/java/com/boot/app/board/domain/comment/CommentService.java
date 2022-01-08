@@ -15,4 +15,8 @@ public class CommentService {
 
         return comments;
     }
+
+    public void insertMainComment(Comment comment){
+        commentMapper.insertMainComment(comment);
+    }
 }

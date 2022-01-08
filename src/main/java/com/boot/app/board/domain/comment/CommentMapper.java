@@ -8,4 +8,5 @@ import java.util.List;
 public interface CommentMapper {
 
     List<Comment> findByPostId(Long postId);
+    void insertMainComment(Comment comment);
 }

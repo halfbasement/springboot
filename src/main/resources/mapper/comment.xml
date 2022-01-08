@@ -10,7 +10,15 @@
         SELECT *
         FROM comment
         WHERE post_id=#{postId}
+        ORDER BY  reg_date ASC
         ]]>
     </select>
 
+    <insert id="insertMainComment" parameterType="Comment">
+         <![CDATA[
+        insert into comment(comment, member_email, post_id)
+        values (#{comment},#{memberEmail},#{postId})
+        ]]>
+
+    </insert>
 </mapper>
