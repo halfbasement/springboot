@@ -16,7 +16,19 @@ public class CommentService {
         return comments;
     }
 
-    public void insertMainComment(Comment comment){
-        commentMapper.insertMainComment(comment);
+    public Long insertMainComment(Comment comment){
+        Long selectKey = commentMapper.insertMainComment(comment);
+
+        System.out.println("selectKey = " + selectKey);
+
+        System.out.println("comment.getCommentId() = " + comment.getCommentId()); ;
+
+        return comment.getCommentId();
+    }
+
+    public Comment findMainComment(Long commentId){
+        Comment mainComment = commentMapper.findMainComment(commentId);
+
+        return mainComment;
     }
 }

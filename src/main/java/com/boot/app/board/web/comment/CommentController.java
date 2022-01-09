@@ -2,7 +2,7 @@ package com.boot.app.board.web.comment;
 
 import com.boot.app.board.domain.comment.Comment;
 import com.boot.app.board.domain.comment.CommentService;
-import com.boot.app.board.web.comment.dto.CommentListDto;
+import com.boot.app.board.web.comment.dto.CommentBasicDto;
 import com.boot.app.board.web.comment.dto.CommentSaveDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,12 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/comment")
@@ -28,7 +27,7 @@ public class CommentController {
 
 
     @GetMapping("/{postId}")
-    public ResponseEntity<Map<String,List<CommentListDto>>> CommentList(@PathVariable Long postId) {
+    public ResponseEntity<Map<String,List<CommentBasicDto>>> CommentList(@PathVariable Long postId) {
         List<Comment> comments = commentService.commentList(postId);
 
    /*     List<CommentListDto> collect = comments.stream()
@@ -36,16 +35,16 @@ public class CommentController {
                 .collect(Collectors.toList());*/
 
 
-        List<CommentListDto> mainComment = comments.stream().filter(c -> c.getParent() == null)
-                .map(c -> new CommentListDto(c.getCommentId(), c.getComment(), c.getMemberEmail(), c.getParent(), c.getRegDate()))
+        List<CommentBasicDto> mainComment = comments.stream().filter(c -> c.getParent() == null)
+                .map(c -> new CommentBasicDto(c.getCommentId(), c.getComment(), c.getMemberEmail(), c.getParent(), c.getRegDate()))
                 .collect(Collectors.toList());
 
-        List<CommentListDto> subComment = comments.stream().filter(c -> c.getParent() != null)
-                .map(c -> new CommentListDto(c.getCommentId(), c.getComment(), c.getMemberEmail(), c.getParent(), c.getRegDate()))
+        List<CommentBasicDto> subComment = comments.stream().filter(c -> c.getParent() != null)
+                .map(c -> new CommentBasicDto(c.getCommentId(), c.getComment(), c.getMemberEmail(), c.getParent(), c.getRegDate()))
                 .collect(Collectors.toList());
 
 
-       Map<String,List<CommentListDto>> result = new HashMap<>();
+       Map<String,List<CommentBasicDto>> result = new HashMap<>();
         result.put("main",mainComment);
         result.put("sub",subComment);
 
@@ -56,7 +55,7 @@ public class CommentController {
 
 
     @PostMapping//ResponseEntity로 selectkey값 받아와서 넘겨줌
-    public ResponseEntity<String> addComment(@RequestBody CommentSaveDto dto){
+    public ResponseEntity<CommentBasicDto> addComment(@RequestBody CommentSaveDto dto){
 
         Comment mainComment = Comment.builder()
                 .comment(dto.getComment())
@@ -64,8 +63,15 @@ public class CommentController {
                 .postId(dto.getPostId())
                 .build();
 
-        commentService.insertMainComment(mainComment);
+        Long saveCommentId = commentService.insertMainComment(mainComment);
 
-        return new ResponseEntity<>("SEX",HttpStatus.OK);
+        Comment findMain = commentService.findMainComment(saveCommentId);
+
+        CommentBasicDto result = new CommentBasicDto(findMain.getCommentId(), findMain.getComment(), findMain.getMemberEmail(), findMain.getParent(), findMain.getRegDate());
+
+
+        System.out.println("result = " + result.toString());
+
+        return new ResponseEntity<>(result,HttpStatus.OK);
     }
 }

@@ -14,11 +14,24 @@
         ]]>
     </select>
 
+    <select id="findMainComment" parameterType="Long" resultType="Comment">
+         <![CDATA[
+        SELECT *
+        FROM comment
+        WHERE comment_id=#{commentId}
+        ]]>
+    </select>
+
+
     <insert id="insertMainComment" parameterType="Comment">
          <![CDATA[
         insert into comment(comment, member_email, post_id)
         values (#{comment},#{memberEmail},#{postId})
         ]]>
+
+        <selectKey keyProperty="commentId" resultType="Long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
 
     </insert>
 </mapper>

@@ -34,20 +34,20 @@
     </div>
     <input type="hidden" id="detail_post_id" th:value="${post.postId}"/>
 
-    <div class="comment_group" style="float: left">
+
+    <hr class="my-4">
+
+    <div class="comment_group" align="left" style=" width: 100%">
 
 
     </div>
-
-
-    <hr class="my-4">
 
 
 
 
     <th:block th:if="${member?.email != null }">
 
-        <div class="mb-4" style="background: white; height: 120px">
+        <div class="mb-4" style="background: white; height: 120px ; height:140px; border: 1px solid black">
             <div class="comment_addBox" style="padding: 20px;">
                 <div style="float: left" id="comment_main_author" th:value="${member?.email}">[[${member?.email}]]</div>
                 <textarea class="form-control" rows="1" style="border: none" id="comment_main"
@@ -62,10 +62,9 @@
     </th:block>
 
 
-    <hr class="my-4">
 
 
-    <div class="row">
+    <div class="row" style="display: block">
 
 
         <th:block th:if="${member?.email != null } and ${member?.email} == ${post.author}">
@@ -83,7 +82,7 @@
             </div>
         </th:block>
 
-        <div class="col">
+        <div class="col" >
             <button class="w-100 btn btn-secondary btn-lg"
                     th:onclick="|location.href='@{/post}'|"
                     type="button">목록으로

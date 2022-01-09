@@ -10,6 +10,11 @@ var comment = {
             $('#comment_main').val('');
         })
 
+        $(document).on('click','.subWrite_btn',function (e){
+
+            console.log(e.target.value);
+        })
+
     },
 
     load: function () {
@@ -38,11 +43,13 @@ var comment = {
 
 
 
-                    str += '<div class="card-body">'
+                    str += '<div class="card-body" style="padding: 0px">'
                     str += '<h5 class="card-title">' + main.memberEmail + '</h5>  '
                     str += '<h6 class="card-subtitle mb-2 text-muted">' + main.comment + '</h6>'
-                    str += '<p class="card-text">' + fomatDate(main.regDate) + '</p> '
-                    str += '</div>'
+                    str += '<p class="card-text">' + fomatDate(main.regDate) + '</p> <button class="btn btn-default subWrite_btn" value="'+main.commentId+'">답글쓰기</button> '
+                    str += ' <hr class="my-4">'
+
+
                     //자식이 있으면 자식도 생성
                     $.each(data.sub, function (idx, sub) {
 
@@ -50,15 +57,17 @@ var comment = {
                         if (main.commentId == sub.parent) {
 
 
-                            str += '<div class="card-body" style="margin-left: 50px">'
+                            str += '<div style="margin-left: 50px; padding: 0px">'
                             str += '<h5 class="card-title">' + sub.memberEmail + '</h5>  '
                             str += '<h6 class="card-subtitle mb-2 text-muted">' + sub.comment + '</h6>'
-                            str += '<p class="card-text">' + fomatDate(sub.regDate) + '</p> '
+                            str += '<p class="card-text">' + fomatDate(sub.regDate) + '</p> <button class="btn btn-default subWrite_btn" value="'+sub.parent+'">답글쓰기</button> '
+                            str += ' <hr class="my-4">'
                             str += '</div>'
+
                         }
                     })
 
-
+                    str += '</div>'
                     $('.comment_group').html(str);
 
 
@@ -76,8 +85,7 @@ var comment = {
             memberEmail: $('#comment_main_author').attr('value'),
         }
 
-        console.log('data', data);
-
+        var url = $('#detail_post_id').val()
 
         $.ajax({
             type: 'POST',
@@ -86,57 +94,17 @@ var comment = {
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(data),
             success: function (data) {
-                alert(data)
             },
             error: function (e) {
                 alert(JSON.stringify(e))
             }
+        }).done(function (){
+            comment.load();
         })
 
 
     }
     ,
-    update: function () {
-        var data = {
-            postNo: $('#update-post-no').val(),
-            postTitle: $('#update-post-title').val(),
-            postContent: $('#update-post-content').val()
-        }
-
-        console.log(data)
-        $.ajax({
-            type: 'PUT',
-            url: '/post/' + data.postNo,
-            // dataType: 'json',
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify(data)
-        }).done(function () {
-            alert("수정 되었습니다")
-            window.location.href = '/post';
-
-        }).fail(function (e) {
-            alert(JSON.stringify(e))
-        });
-    },
-
-
-    delete: function () { //넘어갈 값이 없어서 id값으로만
-        var id = $('#detail-post-no').val();
-
-        $.ajax({
-            type: 'DELETE',
-            url: '/post/' + id,
-            // dataType: 'json',
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify(id)
-        }).done(function () {
-            alert("삭제 되었습니디") //일로 오기전에 요청페이지를 들어가서 done이 되기 때문에 현재 오류 뜸
-            window.location.href = '/post';
-
-        }).fail(function (e) {
-            alert(JSON.stringify(e))
-        });
-    },
 
 
 };
