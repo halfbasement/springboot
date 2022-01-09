@@ -5,11 +5,14 @@
 >
 
 <head>
+
     <!--자동추가-->
 </head>
 <body>
 
+
 <div layout:fragment="content">
+
 
     <h2 th:if="${param.status}" th:text="'저장 완료'"></h2>
 
@@ -25,85 +28,47 @@
         <label for="regDate">작성일</label>
         <input type="text" id="regDate" name="regDate" class="form-control" th:value="${post.regDate}" readonly>
     </div>
-
     <div>
         <label for="regDate">내용</label>
         <textarea name="content" class="form-control" readonly>[[${post.content}]]</textarea>
     </div>
+    <input type="hidden" id="detail_post_id" th:value="${post.postId}"/>
+
+    <div class="comment_group" style="float: left">
+
+
+    </div>
 
 
     <hr class="my-4">
-    <th:block>
-
-        <!-- Comments section-->
-        <section class="mb-5">
-            <div class="card bg-light">
-                <div class="card-body">
-
-                    <!-- Comment with nested comments-->
-                    <div class="d-flex mb-4" style="text-align: left">
-                        <!-- Parent comment-->
-                        <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-                        <div class="ms-3">
-                            <div class="fw-bold">Commenter Name</div>
-                            If you're going to lead a space frontier, it has to be government; it'll never be private enterprise. Because the space frontier is dangerous, and it's expensive, and it has unquantified risks.
-                            <!-- Child comment 1-->
-                            <div class="d-flex mt-4">
-                                <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-                                <div class="ms-3">
-                                    <div class="fw-bold">Commenter Name</div>
-                                    And under those conditions, you cannot establish a capital-market evaluation of that enterprise. You can't get investors.
-                                </div>
-                            </div>
-                            <!--
-                            Child comment 2-->
-                            <div class="d-flex mt-4">
-                                <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-                                <div class="ms-3">
-                                    <div class="fw-bold">Commenter Name</div>
-                                    When you put money directly to a problem, it makes a good headline.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Comment form-->
-                    <th:block th:if="${member?.email != null }" >
-
-                        <div class="mb-4" style="background: white; height: 120px">
-                            <div class="comment_box" style="padding: 20px;">
-                                <div style="float: left" id="comment_main_author" th:value="${member.email}" >[[${member.email}]]</div>
-                                <textarea class="form-control" rows="1"  style="border: none" id="comment_main" placeholder="댓글을 남겨보세요"></textarea>
-                                <input type="hidden" id="comment_post_id"  th:value="${post.postId}"/>
-                                <button type="button" id="comment_main_submit" class="btn btn-default" style="float: right; ">등록</button>
-                            </div>
-                        </div>
-
-
-                    </th:block>
 
 
 
-                    <!--
-                    Single comment
-                    <div class="d-flex">
-                        <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-                        <div class="ms-3">
-                            <div class="fw-bold">Commenter Name</div>
-                            When I look at the universe and all the ways the universe wants to kill us, I find it hard to reconcile that with statements of beneficence.
-                        </div>
-                    </div>-->
-                </div>
+
+    <th:block th:if="${member?.email != null }">
+
+        <div class="mb-4" style="background: white; height: 120px">
+            <div class="comment_addBox" style="padding: 20px;">
+                <div style="float: left" id="comment_main_author" th:value="${member?.email}">[[${member?.email}]]</div>
+                <textarea class="form-control" rows="1" style="border: none" id="comment_main"
+                          placeholder="댓글을 남겨보세요"></textarea>
+                <input type="hidden" id="comment_post_id" th:value="${post.postId}"/>
+                <button type="button" id="comment_main_submit" class="btn btn-default" style="float: right; ">등록
+                </button>
             </div>
-        </section>
-        <hr class="my-4">
+        </div>
+
+
     </th:block>
+
+
+    <hr class="my-4">
 
 
     <div class="row">
 
 
-        <th:block th:if="${member?.email != null } and ${post.author} == ${member.email}">
+        <th:block th:if="${member?.email != null } and ${member?.email} == ${post.author}">
             <div class="col">
                 <button class="w-100 btn btn-primary btn-lg"
                         th:onclick="|location.href='@{/post/{postId}/edit(postId=${post.postId})}'|"
@@ -124,8 +89,6 @@
                     type="button">목록으로
             </button>
         </div>
-
-
     </div>
 
 </div>

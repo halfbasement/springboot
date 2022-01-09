@@ -9,6 +9,7 @@ import java.sql.Date;
 @Getter
 public class PostListDto {
 
+
     private Long postId;
     private String title;
     private String author;

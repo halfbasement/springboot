@@ -28,19 +28,30 @@ public class CommentController {
 
 
     @GetMapping("/{postId}")
-    public ResponseEntity<List<CommentListDto>> CommentList(@PathVariable Long postId) {
+    public ResponseEntity<Map<String,List<CommentListDto>>> CommentList(@PathVariable Long postId) {
         List<Comment> comments = commentService.commentList(postId);
 
-        List<CommentListDto> collect = comments.stream()
+   /*     List<CommentListDto> collect = comments.stream()
                 .map(comment -> new CommentListDto(comment.getComment(), comment.getMemberEmail(), comment.getParent(), comment.getRegDate()))
+                .collect(Collectors.toList());*/
+
+
+        List<CommentListDto> mainComment = comments.stream().filter(c -> c.getParent() == null)
+                .map(c -> new CommentListDto(c.getCommentId(), c.getComment(), c.getMemberEmail(), c.getParent(), c.getRegDate()))
                 .collect(Collectors.toList());
 
-       /* Map<String,Object> result = new HashMap<>();
-        result.put("comments",collect);
-*/
-        log.info("collect={}",collect);
+        List<CommentListDto> subComment = comments.stream().filter(c -> c.getParent() != null)
+                .map(c -> new CommentListDto(c.getCommentId(), c.getComment(), c.getMemberEmail(), c.getParent(), c.getRegDate()))
+                .collect(Collectors.toList());
 
-        return new ResponseEntity<>(collect,HttpStatus.OK);
+
+       Map<String,List<CommentListDto>> result = new HashMap<>();
+        result.put("main",mainComment);
+        result.put("sub",subComment);
+
+
+
+        return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
 
