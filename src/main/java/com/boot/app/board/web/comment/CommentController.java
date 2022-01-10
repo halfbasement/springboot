@@ -76,6 +76,7 @@ public class CommentController {
                 .comment(dto.getComment())
                 .memberEmail(dto.getMemberEmail())
                 .postId(dto.getPostId())
+                .parent(dto.getParent())
                 .build();
 
         Long saveCommentId = commentService.insertMainComment(mainComment);

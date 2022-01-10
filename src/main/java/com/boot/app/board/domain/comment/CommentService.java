@@ -17,7 +17,7 @@ public class CommentService {
     }
 
     public Long insertMainComment(Comment comment){
-        Long selectKey = commentMapper.insertMainComment(comment);
+        Long selectKey = commentMapper.insertComment(comment);
 
         System.out.println("selectKey = " + selectKey);
 

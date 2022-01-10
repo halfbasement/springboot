@@ -23,10 +23,10 @@
     </select>
 
 
-    <insert id="insertMainComment" parameterType="Comment">
+    <insert id="insertComment" parameterType="Comment">
          <![CDATA[
-        insert into comment(comment, member_email, post_id)
-        values (#{comment},#{memberEmail},#{postId})
+        insert into comment(comment, member_email, post_id,parent)
+        values (#{comment},#{memberEmail},#{postId},#{parent})
         ]]>
 
         <selectKey keyProperty="commentId" resultType="Long" order="AFTER">

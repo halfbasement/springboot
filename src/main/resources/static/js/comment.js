@@ -10,6 +10,9 @@ var comment = {
             $('#comment_main').val('');
         })
 
+
+
+        // subComment modal
         $(document).on('click','.subWrite_btn',function (e){
 
             $('.subComment_modal').remove();
@@ -46,14 +49,52 @@ var comment = {
                     str += '<div><textarea className="form-control" rows="1" style="border: none; width: 100%" id="comment_sub" placeholder="댓글을 남겨보세요"></textarea> </div>' // -> 입력
                     str += '<input type="hidden" id="sub_comment_post_id" value="'+data.postId+'"/>' //밸류 미리 박아둬야함 -> @PathVariable
                     str += '<input type="hidden" id="sub_comment_parent" value="' + checkId(subCommentId, parent) + '"/>'
-                    str += '<button type="button" id="sub_comment_main_submit"  style="float: right; border:none; background:white ">등록</button>'
+                    str += '<button type="button" id="comment_sub_submit"  style="float: right; border:none; background:white ">등록</button>'
                     str += '</div>'
                     str += '</div>'
                     str += '</div>'
 
                     $('#subComment_input'+subCommentId).append(str);
+
+
+
+                    $('#comment_sub_submit').on('click', function () {
+                        console.log('sex')
+                        _this.createSub();
+                        $('.subComment_modal').remove();
+
+                    })
                 })
 
+        })
+
+    },
+
+    createSub: function () {
+        var data = {
+            postId: $('#sub_comment_post_id').val(),
+            comment: $('#comment_sub').val(),
+            memberEmail: $('#comment_sub_author').attr('value'),
+            parent:$('#sub_comment_parent').val()
+        }
+
+
+        console.log('subModal',data)
+
+
+        $.ajax({
+            type: 'POST',
+            url: '/comment',
+            //dataType: 'json', 데이터타입 json으로 하면 null(parent)을 못받아줘서 에러가 뜸
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data),
+            success: function (data) {
+            },
+            error: function (e) {
+                alert(JSON.stringify(e))
+            }
+        }).done(function (){
+            comment.load();
         })
 
     },
@@ -149,9 +190,10 @@ var comment = {
             comment.load();
         })
 
-
     }
     ,
+
+
 
 
 };
