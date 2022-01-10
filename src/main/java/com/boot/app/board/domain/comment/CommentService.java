@@ -27,8 +27,12 @@ public class CommentService {
     }
 
     public Comment findMainComment(Long commentId){
-        Comment mainComment = commentMapper.findMainComment(commentId);
+        Comment mainComment = commentMapper.findByCommentId(commentId);
 
         return mainComment;
+    }
+
+    public void remove(Long commentId){
+        commentMapper.deleteComment(commentId);
     }
 }

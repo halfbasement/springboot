@@ -15,7 +15,7 @@ public class CommentBasicDto {
     private Long parent;
 
 
-    private LocalDateTime regDate;
+    private LocalDateTime modifiedDate;
 
 
 }

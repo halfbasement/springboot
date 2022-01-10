@@ -14,7 +14,7 @@
         ]]>
     </select>
 
-    <select id="findMainComment" parameterType="Long" resultType="Comment">
+    <select id="findByCommentId" parameterType="Long" resultType="Comment">
          <![CDATA[
         SELECT *
         FROM comment
@@ -22,6 +22,14 @@
         ]]>
     </select>
 
+    <update id="updateComment" parameterType="Comment">
+          <![CDATA[
+        UPDATE comment
+        SET comment=#{comment},
+            modified_date = now()
+        WHERE commentId = #{commentId}
+        ]]>
+    </update>
 
     <insert id="insertComment" parameterType="Comment">
          <![CDATA[
@@ -34,4 +42,12 @@
         </selectKey>
 
     </insert>
+
+    <delete id="deleteComment" parameterType="Long">
+          <![CDATA[
+        DELETE
+        FROM comment
+        WHERE comment_id = #{commentId}
+        ]]>
+    </delete>
 </mapper>

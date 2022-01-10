@@ -15,21 +15,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/comment")
 @RequiredArgsConstructor
 @Slf4j
-public class CommentController {
+public class CommentApiController {
 
     private final CommentService commentService;
 
 
 
     @GetMapping("/{postId}")
-    public ResponseEntity<Map<String,List<CommentBasicDto>>> CommentList(@PathVariable Long postId) {
+    public ResponseEntity<Map<String,Object>> CommentList(@PathVariable Long postId,@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
         List<Comment> comments = commentService.commentList(postId);
 
    /*     List<CommentListDto> collect = comments.stream()
@@ -37,37 +36,40 @@ public class CommentController {
                 .collect(Collectors.toList());*/
 
 
+        //보여줄 땐 최신날짜로 , insert할 땐 regDate 생성날짜로
         List<CommentBasicDto> mainComment = comments.stream().filter(c -> c.getParent() == null)
-                .map(c -> new CommentBasicDto(c.getCommentId(), c.getComment(), c.getMemberEmail(), c.getParent(), c.getRegDate()))
+                .map(c -> new CommentBasicDto(c.getCommentId(), c.getComment(), c.getMemberEmail(), c.getParent(), c.getModifiedDate()))
                 .collect(Collectors.toList());
 
         List<CommentBasicDto> subComment = comments.stream().filter(c -> c.getParent() != null)
-                .map(c -> new CommentBasicDto(c.getCommentId(), c.getComment(), c.getMemberEmail(), c.getParent(), c.getRegDate()))
+                .map(c -> new CommentBasicDto(c.getCommentId(), c.getComment(), c.getMemberEmail(), c.getParent(), c.getModifiedDate()))
                 .collect(Collectors.toList());
 
+        Map<String,Object> result = new HashMap<>();
+        result.put("main", mainComment);
+        result.put("sub", subComment);
 
-       Map<String,List<CommentBasicDto>> result = new HashMap<>();
-        result.put("main",mainComment);
-        result.put("sub",subComment);
+        if(member!=null){
+            result.put("memberEmail",member.getEmail());
+        }
+
 
 
 
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
-    @GetMapping("/{postId}/modal")
+
+    @GetMapping("/{postId}/addModalInfo")
     public ResponseEntity<Map<String,Object>> CommentModalInfo(@PathVariable Long postId, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member){
 
-
         Map<String,Object> result = new HashMap<>();
-
         result.put("postId",postId);
         result.put("memberEmail",member.getEmail());
 
-
-
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
+
 
     @PostMapping//ResponseEntity로 selectkey값 받아와서 넘겨줌
     public ResponseEntity<CommentBasicDto> addComment(@RequestBody CommentSaveDto dto){
@@ -89,5 +91,15 @@ public class CommentController {
         System.out.println("result = " + result.toString());
 
         return new ResponseEntity<>(result,HttpStatus.OK);
+    }
+
+
+
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity removeComment(@PathVariable Long commentId){
+
+        commentService.remove(commentId);
+
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

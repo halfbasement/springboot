@@ -18,5 +18,5 @@ public class Comment {
     private String memberEmail;
     private Long postId;
     private LocalDateTime regDate;
-    private Date modifiedDate;
+    private LocalDateTime modifiedDate;
 }

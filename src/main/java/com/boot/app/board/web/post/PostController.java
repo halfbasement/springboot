@@ -29,7 +29,6 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
-    private final CommentService commentService;
 
     @GetMapping()
     public String posts(@ModelAttribute Post post, Model model) {

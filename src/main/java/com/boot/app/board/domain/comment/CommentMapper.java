@@ -9,5 +9,6 @@ public interface CommentMapper {
 
     List<Comment> findByPostId(Long postId);
     Long insertComment(Comment comment);
-    Comment findMainComment(Long commentId);
+    Comment findByCommentId(Long commentId);
+    void deleteComment(Long commentId);
 }
