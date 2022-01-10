@@ -8,4 +8,5 @@ public class CommentSaveDto {
     private String comment;
     private String memberEmail;
     private Long postId;
+    private Long parent;
 }

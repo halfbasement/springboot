@@ -2,8 +2,10 @@ package com.boot.app.board.web.comment;
 
 import com.boot.app.board.domain.comment.Comment;
 import com.boot.app.board.domain.comment.CommentService;
+import com.boot.app.board.domain.member.Member;
 import com.boot.app.board.web.comment.dto.CommentBasicDto;
 import com.boot.app.board.web.comment.dto.CommentSaveDto;
+import com.boot.app.board.web.login.SessionConst;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -53,6 +55,19 @@ public class CommentController {
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
+    @GetMapping("/{postId}/modal")
+    public ResponseEntity<Map<String,Object>> CommentModalInfo(@PathVariable Long postId, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member){
+
+
+        Map<String,Object> result = new HashMap<>();
+
+        result.put("postId",postId);
+        result.put("memberEmail",member.getEmail());
+
+
+
+        return new ResponseEntity<>(result,HttpStatus.OK);
+    }
 
     @PostMapping//ResponseEntity로 selectkey값 받아와서 넘겨줌
     public ResponseEntity<CommentBasicDto> addComment(@RequestBody CommentSaveDto dto){

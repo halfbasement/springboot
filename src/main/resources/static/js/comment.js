@@ -6,13 +6,54 @@ var comment = {
         _this.load()
 
         $('#comment_main_submit').on('click', function () {
-            _this.create();
+            _this.createMain();
             $('#comment_main').val('');
         })
 
         $(document).on('click','.subWrite_btn',function (e){
 
-            console.log(e.target.value);
+            $('.subComment_modal').remove();
+
+
+            // 현재 대댓글의 ID와 부모댓글의 ID 불러옴
+            let value = e.target.value.split(",");
+            let subCommentId =  value[0];
+            let parent = value[1];
+            console.log(subCommentId,parent);
+
+            //부모가 없다면 , 부모의 아이디 반환
+            function checkId(subCommentId,parent){
+
+                if(parent===null||parent===undefined){
+                    return subCommentId;
+                }else{
+                    return parent;
+                }
+
+            }
+
+            var url = $('#detail_post_id').val()
+
+                $.getJSON('/comment/' + url +'/modal', function (data) {
+
+                    //html생성성
+                    var str = "";
+
+                    str += '<div class="subComment_modal" >'
+                    str += '<div className="mb-4" style="background: white; height: 120px ; height:140px; border: 1px solid black">'
+                    str += '<div className="sub_comment_addBox" style="padding: 20px;">'
+                    str += '<div  id="comment_sub_author"  value="'+data.memberEmail+'">'+data.memberEmail+'</div>' //밸류 미리 박아둬야함 -> 로그인 정보 (컨트롤러에서 세션정보가져오기)
+                    str += '<div><textarea className="form-control" rows="1" style="border: none; width: 100%" id="comment_sub" placeholder="댓글을 남겨보세요"></textarea> </div>' // -> 입력
+                    str += '<input type="hidden" id="sub_comment_post_id" value="'+data.postId+'"/>' //밸류 미리 박아둬야함 -> @PathVariable
+                    str += '<input type="hidden" id="sub_comment_parent" value="' + checkId(subCommentId, parent) + '"/>'
+                    str += '<button type="button" id="sub_comment_main_submit"  style="float: right; border:none; background:white ">등록</button>'
+                    str += '</div>'
+                    str += '</div>'
+                    str += '</div>'
+
+                    $('#subComment_input'+subCommentId).append(str);
+                })
+
         })
 
     },
@@ -46,8 +87,11 @@ var comment = {
                     str += '<div class="card-body" style="padding: 0px">'
                     str += '<h5 class="card-title">' + main.memberEmail + '</h5>  '
                     str += '<h6 class="card-subtitle mb-2 text-muted">' + main.comment + '</h6>'
-                    str += '<p class="card-text">' + fomatDate(main.regDate) + '</p> <button class="btn btn-default subWrite_btn" value="'+main.commentId+'">답글쓰기</button> '
+                    str += '<p class="card-text">' + fomatDate(main.regDate) + '</p>'
+                    str += ' <button class="btn btn-default subWrite_btn"   value="'+main.commentId+'">답글쓰기</button> '
                     str += ' <hr class="my-4">'
+                    str += '<div id="subComment_input'+main.commentId+'" >'
+                    str += '</div>'
 
 
                     //자식이 있으면 자식도 생성
@@ -60,8 +104,11 @@ var comment = {
                             str += '<div style="margin-left: 50px; padding: 0px">'
                             str += '<h5 class="card-title">' + sub.memberEmail + '</h5>  '
                             str += '<h6 class="card-subtitle mb-2 text-muted">' + sub.comment + '</h6>'
-                            str += '<p class="card-text">' + fomatDate(sub.regDate) + '</p> <button class="btn btn-default subWrite_btn" value="'+sub.parent+'">답글쓰기</button> '
+                            str += '<p class="card-text">' + fomatDate(sub.regDate) + '</p> '
+                            str += '<button class="btn btn-default subWrite_btn"   value="'+sub.commentId+','+main.commentId+'">답글쓰기</button> '
                             str += ' <hr class="my-4">'
+                            str += '</div>'
+                            str += '<div id="subComment_input'+sub.commentId+'" >'
                             str += '</div>'
 
                         }
@@ -78,7 +125,7 @@ var comment = {
         }
     },
 
-    create: function () {
+    createMain: function () {
         var data = {
             postId: $('#comment_post_id').val(),
             comment: $('#comment_main').val(),
