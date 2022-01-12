@@ -22,10 +22,12 @@ var comment = {
             $.ajax({
                 type: 'DELETE',
                 url: deleteUrl,
-                //dataType: 'json', 데이터타입 json으로 하면 null(parent)을 못받아줘서 에러가 뜸
+                //dataType: 'json', 데이터타입 json으로 하면 null(parent)을 못받아줘서 에러로 넘어감
                 contentType: 'application/json; charset=utf-8',
                 success: function (data) {
-                    alert('삭제 완료')
+                    alert("삭제 되었습니다.")
+
+
                 },
                 error: function (e) {
                     alert(JSON.stringify(e))
@@ -245,77 +247,83 @@ var comment = {
             $.getJSON('/comment/' + url, function (data) {
                 console.log(data);
 
+                if(data.sub && data.main == false) //데이터가 없으면
+                {
+                    $('.comment_group').html("<div></div>"); //아무것도 없이 반환
+                    return;
+                }
+
                 let str = "";
 
 
 
 
-                // 댓글 생성
-                $.each(data.main, function (idx, main) {
 
-                    function checkMainEmail(){
+                    // 댓글 생성
+                    $.each(data.main, function (idx, main) {
 
-
-                        if( data.memberEmail!==false && data.memberEmail === main.memberEmail){
-                            return ' <button class="btn btn-danger comment_delete_btn" style="float: right" value="'+main.commentId+'" >삭제</button> '+
-                                   ' <button class="btn btn-primary comment_update_btn" style="float: right"  value="'+main.commentId+'">수정</button>';
-                        }else{
-                            return '';
-                        }
-                    }
+                        function checkMainEmail() {
 
 
-
-                    str += '<div class="card-body" style="padding: 0px">'
-                    str += '<div id="updateComment_box'+main.commentId+'">'
-                    str += '<h5 class="card-title">' + main.memberEmail + '</h5>  '
-                    str += '<h6 class="card-subtitle mb-2 text-muted">' + main.comment + '</h6>'
-                    str += '<p class="card-text">' + fomatDate(main.modifiedDate) + '</p>'
-                    str += ' <button class="btn btn-default subWrite_btn"   value="'+main.commentId+'">답글쓰기</button> '
-                    str += checkMainEmail();
-                    str += '</div>'
-                    str += ' <hr class="my-4">'
-                    str += '<div id="subComment_input'+main.commentId+'" >'
-                    str += '</div>'
-
-
-                    //자식이 있으면 자식도 생성
-                    $.each(data.sub, function (idx, sub) {
-
-                        function checkSubEmail(){
-                            if( data.memberEmail !== false  && data.memberEmail === sub.memberEmail){
-                                return ' <button class="btn btn-danger comment_delete_btn" style="float: right" value="'+sub.commentId+'">삭제</button> '+
-                                       ' <button class="btn btn-primary comment_update_btn" style="float: right" value="'+sub.commentId+'">수정</button>';
-                            }else{
+                            if (data.memberEmail !== false && data.memberEmail === main.memberEmail) {
+                                return ' <button class="btn btn-danger comment_delete_btn" style="float: right" value="' + main.commentId + '" >삭제</button> ' +
+                                    ' <button class="btn btn-primary comment_update_btn" style="float: right"  value="' + main.commentId + '">수정</button>';
+                            } else {
                                 return '';
                             }
                         }
 
-                        if (main.commentId == sub.parent) {
+
+                        str += '<div class="card-body" style="padding: 0px">'
+                        str += '<div id="updateComment_box' + main.commentId + '">'
+                        str += '<h5 class="card-title">' + main.memberEmail + '</h5>  '
+                        str += '<h6 class="card-subtitle mb-2 text-muted">' + main.comment + '</h6>'
+                        str += '<p class="card-text">' + fomatDate(main.modifiedDate) + '</p>'
+                        str += ' <button class="btn btn-default subWrite_btn"   value="' + main.commentId + '">답글쓰기</button> '
+                        str += checkMainEmail();
+                        str += '</div>'
+                        str += ' <hr class="my-4">'
+                        str += '<div id="subComment_input' + main.commentId + '" >'
+                        str += '</div>'
 
 
+                        //자식이 있으면 자식도 생성
+                        $.each(data.sub, function (idx, sub) {
 
-                            str += '<div id="updateComment_box'+sub.commentId+'" style="margin-left: 50px; padding: 0px">'
-                            str += '<h5 class="card-title">' + sub.memberEmail + '</h5>  '
-                            str += '<h6 class="card-subtitle mb-2 text-muted">' + sub.comment + '</h6>'
-                            str += '<p class="card-text">' + fomatDate(sub.modifiedDate) + '</p> '
-                            str += '<button class="btn btn-default subWrite_btn"   value="'+sub.commentId+','+main.commentId+'">답글쓰기</button> '
-                            str += checkSubEmail();
-                            str += '</div>'
-                            str += ' <hr class="my-4">'
-                            str += '<div id="subComment_input'+sub.commentId+'" >'
-                            str += '</div>'
+                            function checkSubEmail() {
+                                if (data.memberEmail !== false && data.memberEmail === sub.memberEmail) {
+                                    return ' <button class="btn btn-danger comment_delete_btn" style="float: right" value="' + sub.commentId + '">삭제</button> ' +
+                                        ' <button class="btn btn-primary comment_update_btn" style="float: right" value="' + sub.commentId + '">수정</button>';
+                                } else {
+                                    return '';
+                                }
+                            }
 
-                        }
+                            if (main.commentId == sub.parent) {
+
+
+                                str += '<div id="updateComment_box' + sub.commentId + '" style="margin-left: 50px; padding: 0px">'
+                                str += '<h5 class="card-title">' + sub.memberEmail + '</h5>  '
+                                str += '<h6 class="card-subtitle mb-2 text-muted">' + sub.comment + '</h6>'
+                                str += '<p class="card-text">' + fomatDate(sub.modifiedDate) + '</p> '
+                                str += '<button class="btn btn-default subWrite_btn"   value="' + sub.commentId + ',' + main.commentId + '">답글쓰기</button> '
+                                str += checkSubEmail();
+                                str += '</div>'
+                                str += ' <hr class="my-4">'
+                                str += '<div id="subComment_input' + sub.commentId + '" >'
+                                str += '</div>'
+
+                            }
+                        })
+
+                        str += '</div>'
+                        $('.comment_group').html(str);
+
+
                     })
 
-                    str += '</div>'
-                    $('.comment_group').html(str);
-
-
-                })
-
             })
+
 
         }
     },
