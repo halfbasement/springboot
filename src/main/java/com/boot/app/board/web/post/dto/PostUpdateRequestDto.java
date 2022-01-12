@@ -22,7 +22,7 @@ public class PostUpdateRequestDto {
     @NotBlank
     private String content;
     private String author;
-    private Date regDate;
+    private LocalDateTime regDate;
 
     public PostUpdateRequestDto(Post entity) {
         this.postId = entity.getPostId();

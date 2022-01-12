@@ -1,25 +1,24 @@
 package com.boot.app.board.domain.post;
 
-import com.boot.app.board.domain.post.paging.PagingData;
+import com.boot.app.board.domain.Common;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
-import java.sql.Date;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-public class Post extends PagingData {
+@NoArgsConstructor
+@AllArgsConstructor
+public class Post extends Common {
 
     private Long postId;
     private String title;
     private String content;
     private String author;
     private Integer number;
-    private Date regDate;
-    private Date modifiedDate;
     //fk
     private String memberEmail;
+
 
 }

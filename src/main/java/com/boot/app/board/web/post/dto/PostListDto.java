@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.Getter;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Getter
 public class PostListDto {
@@ -13,7 +14,7 @@ public class PostListDto {
     private Long postId;
     private String title;
     private String author;
-    private Date regDate;
+    private LocalDateTime regDate;
 
     public PostListDto(Post entity){
         this.postId = entity.getPostId();

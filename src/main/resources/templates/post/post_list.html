@@ -25,7 +25,7 @@
             <td th:text="${post.postId}"></td>
             <td><a th:href="@{|/post/${post.postId}|}" th:text="${post.title}"></a></td>
             <td th:text="${post.author}"></td>
-            <td th:text="${post.regDate}"></td>
+            <td th:text="${#temporals.format(post.regDate,'yyyy-MM-dd')}"></td>
         </tr>
         </tbody>
 
@@ -36,7 +36,8 @@
                 <div class="col">
                     <ul class="pagination">
 
-                            <div th:each="seq : ${#numbers.sequence(1,9)}">
+
+                            <div th:each="seq : ${#numbers.sequence(page.firstPage,page.endPage)}">
                                 <li class="page-item"><a class="page-link" th:href="@{/post(currentPageNo=${seq},recordsPerPage=20)}" th:text="${seq}">1</a></li>
                             </div>
 

@@ -1,5 +1,6 @@
 package com.boot.app.board.domain.comment;
 
+import com.boot.app.board.domain.Common;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -9,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-public class Comment {
+public class Comment extends Common {
 
     private Long commentId;
 
@@ -17,6 +18,4 @@ public class Comment {
     private Long parent;
     private String memberEmail;
     private Long postId;
-    private LocalDateTime regDate;
-    private LocalDateTime modifiedDate;
 }

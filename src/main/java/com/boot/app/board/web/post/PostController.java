@@ -6,10 +6,7 @@ import com.boot.app.board.domain.member.Member;
 import com.boot.app.board.domain.post.Post;
 import com.boot.app.board.domain.post.PostService;
 import com.boot.app.board.web.login.SessionConst;
-import com.boot.app.board.web.post.dto.PostDetailDto;
-import com.boot.app.board.web.post.dto.PostRequestPagingDto;
-import com.boot.app.board.web.post.dto.PostSaveDto;
-import com.boot.app.board.web.post.dto.PostUpdateRequestDto;
+import com.boot.app.board.web.post.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -31,15 +28,19 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping()
-    public String posts(@ModelAttribute Post post, Model model) {
+    public String posts(@ModelAttribute("page") Post post, Model model) {
 
 
 
-        /*
-        페이징
 
-        log.info("count={}",postService.pageCount());
-        Integer pageCount = postService.pageCount();*/
+
+
+       log.info("count={}",postService.pageCount());
+        Integer pageCount = postService.pageCount();
+
+
+
+        post.setEndPage(pageCount);
 
 
 

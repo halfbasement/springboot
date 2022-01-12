@@ -16,7 +16,7 @@ public class PostDetailDto {
     private String title;
     private String content;
     private String author;
-    private Date regDate;
+    private LocalDateTime regDate;
 
 
     public PostDetailDto(Post entity) {
