@@ -27,7 +27,7 @@
         UPDATE comment
         SET comment=#{comment},
             modified_date = now()
-        WHERE commentId = #{commentId}
+        WHERE comment_id = #{commentId}
         ]]>
     </update>
 

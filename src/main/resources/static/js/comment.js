@@ -38,6 +38,50 @@ var comment = {
 
         $(document).on('click','.comment_update_btn',function (e){
 
+            let commentId = e.target.value;
+
+
+            let url='/comment/'+commentId+'/updateModalInfo'
+            $.getJSON(url, function (data) {
+
+
+                if(data) {
+                    //html생성
+                    var str = "";
+
+                    str += '<div class="updateComment_modal" >'
+                    str += '<div className="mb-4" style="background: white; height: 120px ; height:140px; border: 1px solid black">'
+                    str += '<div className="comment_updateBox" style="padding: 20px;">'
+                    str += '<div  id="comment_update_author" value="'+data.memberEmail+'" >' + data.memberEmail + '</div>' //밸류 미리 박아둬야함 -> 로그인 정보 (컨트롤러에서 세션정보가져오기)
+                    str += '<div><textarea className="form-control" rows="1" style="border: none; width: 100%" id="comment_update" placeholder="수정할 댓글을 입력해주세요">'+data.comment+'</textarea> </div>' // -> 입력
+                    str += '<input type="hidden" id="update_commentId" value="'+commentId+'" >'
+                    str += '<button type="button" id="comment_update_cancel"  style="float: right; border:none; background:white ">취소</button>'
+                    str += '<button type="button" id="comment_update_submit"  style="float: right; border:none; background:white ">등록</button>'
+                    str += '</div>'
+                    str += '</div>'
+                    str += '</div>'
+
+
+
+                    $('#updateComment_box' + commentId).html(str);
+
+                }
+
+                $('#comment_update_submit').on('click', function () {
+                    _this.update();
+                  //  $('.updateComment_modal').remove();
+
+                })
+
+                $('#comment_update_cancel').on('click',function (){
+                    $('.updateComment_modal').remove();
+                    _this.load();
+                })
+
+
+            })
+
+
 
         })
 
@@ -52,7 +96,6 @@ var comment = {
             let value = e.target.value.split(",");
             let subCommentId =  value[0];
             let parent = value[1];
-            console.log(subCommentId,parent);
 
             //부모가 없다면 , 부모의 아이디 반환
             function checkId(subCommentId,parent){
@@ -70,7 +113,6 @@ var comment = {
             let url='/comment/'+postId+'/addModalInfo'
                 $.getJSON(url, function (data) {
 
-                    console.log('답글쓰기 data',data)
 
                     if(data) {
                         //html생성
@@ -106,11 +148,48 @@ var comment = {
                         })
 
 
+                }).fail(function (){
+                    alert("로그인이 필요합니다.")
+                    window.location.href="/login?redirectURL=/post/"+postId;
                 })
 
         })
 
     },
+
+    update : function (){
+
+        let commentId =  $('#update_commentId').val()
+        let  data = {
+            comment: $('#comment_update').val(),
+            memberEmail: $('#comment_update_author').attr('value')
+        }
+
+
+        if(data.comment===""){
+            alert("내용을 입력해주세요")
+            return;
+        }else{
+
+            $.ajax({
+                type: 'PUT',
+                url: '/comment/'+commentId,
+                //dataType: 'json', 데이터타입 json으로 하면 null(parent)을 못받아줘서 에러가 뜸
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function (data) {
+                },
+                error: function (e) {
+                    alert(JSON.stringify(e))
+                }
+            }).done(function (){
+                comment.load();
+            })
+
+        }
+
+    }
+    ,
 
     createSub: function () {
         var data = {
@@ -121,23 +200,29 @@ var comment = {
         }
 
 
-        console.log('subModal',data)
+
+        if(data.comment===""){
+            alert("내용을 입력해주세요")
+
+            return;
+        }else{
+            $.ajax({
+                type: 'POST',
+                url: '/comment',
+                //dataType: 'json', 데이터타입 json으로 하면 null(parent)을 못받아줘서 에러가 뜸
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function (data) {
+                },
+                error: function (e) {
+                    alert(JSON.stringify(e))
+                }
+            }).done(function (){
+                comment.load();
+            })
+        }
 
 
-        $.ajax({
-            type: 'POST',
-            url: '/comment',
-            //dataType: 'json', 데이터타입 json으로 하면 null(parent)을 못받아줘서 에러가 뜸
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify(data),
-            success: function (data) {
-            },
-            error: function (e) {
-                alert(JSON.stringify(e))
-            }
-        }).done(function (){
-            comment.load();
-        })
 
     },
 
@@ -182,11 +267,13 @@ var comment = {
 
 
                     str += '<div class="card-body" style="padding: 0px">'
+                    str += '<div id="updateComment_box'+main.commentId+'">'
                     str += '<h5 class="card-title">' + main.memberEmail + '</h5>  '
                     str += '<h6 class="card-subtitle mb-2 text-muted">' + main.comment + '</h6>'
                     str += '<p class="card-text">' + fomatDate(main.modifiedDate) + '</p>'
                     str += ' <button class="btn btn-default subWrite_btn"   value="'+main.commentId+'">답글쓰기</button> '
                     str += checkMainEmail();
+                    str += '</div>'
                     str += ' <hr class="my-4">'
                     str += '<div id="subComment_input'+main.commentId+'" >'
                     str += '</div>'
@@ -207,14 +294,15 @@ var comment = {
                         if (main.commentId == sub.parent) {
 
 
-                            str += '<div style="margin-left: 50px; padding: 0px">'
+
+                            str += '<div id="updateComment_box'+sub.commentId+'" style="margin-left: 50px; padding: 0px">'
                             str += '<h5 class="card-title">' + sub.memberEmail + '</h5>  '
                             str += '<h6 class="card-subtitle mb-2 text-muted">' + sub.comment + '</h6>'
                             str += '<p class="card-text">' + fomatDate(sub.modifiedDate) + '</p> '
                             str += '<button class="btn btn-default subWrite_btn"   value="'+sub.commentId+','+main.commentId+'">답글쓰기</button> '
                             str += checkSubEmail();
-                            str += ' <hr class="my-4">'
                             str += '</div>'
+                            str += ' <hr class="my-4">'
                             str += '<div id="subComment_input'+sub.commentId+'" >'
                             str += '</div>'
 
@@ -239,22 +327,28 @@ var comment = {
             memberEmail: $('#comment_main_author').attr('value'),
         }
 
-        var url = $('#detail_post_id').val()
 
-        $.ajax({
-            type: 'POST',
-            url: '/comment',
-            //dataType: 'json', 데이터타입 json으로 하면 널을 못받아줘서 에러가 뜸
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify(data),
-            success: function (data) {
-            },
-            error: function (e) {
-                alert(JSON.stringify(e))
-            }
-        }).done(function (){
-            comment.load();
-        })
+        if(data.comment===""){
+            alert("내용을 입력해주세요")
+            return;
+        }else{
+            $.ajax({
+                type: 'POST',
+                url: '/comment',
+                //dataType: 'json', 데이터타입 json으로 하면 널을 못받아줘서 에러가 뜸
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function (data) {
+                },
+                error: function (e) {
+                    alert(JSON.stringify(e))
+                }
+            }).done(function (){
+                comment.load();
+            })
+        }
+
+
 
     }
     ,

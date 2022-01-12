@@ -26,7 +26,7 @@ public class CommentService {
         return comment.getCommentId();
     }
 
-    public Comment findMainComment(Long commentId){
+    public Comment findOneComment(Long commentId){
         Comment mainComment = commentMapper.findByCommentId(commentId);
 
         return mainComment;
@@ -35,4 +35,9 @@ public class CommentService {
     public void remove(Long commentId){
         commentMapper.deleteComment(commentId);
     }
+
+    public void update(Comment comment){
+        commentMapper.updateComment(comment);
+    }
+
 }
