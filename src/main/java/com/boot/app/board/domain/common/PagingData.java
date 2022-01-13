@@ -14,6 +14,8 @@ public class PagingData {
     private int firstPage;
     private int endPage;
 
+    private int maxPage;
+
 
 
     public PagingData() {
@@ -21,6 +23,15 @@ public class PagingData {
         this.recordsPerPage = 20;
         this.firstPage=1;
         this.endPage=5;
+    }
+
+    public void setEndPage(int pageTotal) {
+
+        if(pageTotal<1){
+            return;
+        }
+
+        this.endPage = pageTotal;
     }
 
     public int getStartPage(){

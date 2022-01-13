@@ -32,6 +32,12 @@ public class CommentService {
         return mainComment;
     }
 
+    public Long commentCount(Long postId){
+        Long commentCount = commentMapper.findCommentCount(postId);
+
+        return commentCount;
+    }
+
     public void remove(Long commentId){
         commentMapper.deleteComment(commentId);
     }

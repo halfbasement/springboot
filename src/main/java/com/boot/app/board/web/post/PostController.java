@@ -26,6 +26,7 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
+    private final CommentService commentService;
 
     @GetMapping()
     public String posts(@ModelAttribute("page") Post post, Model model) {
@@ -40,7 +41,7 @@ public class PostController {
 
 
 
-        post.setEndPage(pageCount);
+        post.setMaxPage(pageCount);
 
 
 
@@ -109,12 +110,9 @@ public class PostController {
         Post entity = postService.findByPostId(postId);
         PostDetailDto post = new PostDetailDto(entity);
 
-      //  List<Comment> comments = commentService.commentList(postId);
-
 
 
         model.addAttribute("post", post);
-      //  model.addAttribute("comments",comments);
         model.addAttribute("member",member);
         return "post/post_detail";
     }

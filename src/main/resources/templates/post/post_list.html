@@ -17,6 +17,7 @@
             <th>제목</th>
             <th>작성자</th>
             <th>작성일</th>
+            <th>조회수</th>
         </tr>
         </thead>
 
@@ -26,6 +27,7 @@
             <td><a th:href="@{|/post/${post.postId}|}" th:text="${post.title}"></a></td>
             <td th:text="${post.author}"></td>
             <td th:text="${#temporals.format(post.regDate,'yyyy-MM-dd')}"></td>
+            <td th:text="${post.views}"></td>
         </tr>
         </tbody>
 

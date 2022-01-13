@@ -17,6 +17,7 @@ public class Post extends Common {
     private String content;
     private String author;
     private Integer number;
+    private Long views;
     //fk
     private String memberEmail;
 

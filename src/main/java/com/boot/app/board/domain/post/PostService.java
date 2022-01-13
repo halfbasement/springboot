@@ -43,9 +43,13 @@ public class PostService {
         return ceil;
     }
 
+
+
     public Post findByPostId(Long postId){
         Post entity = postMapper.findByPostId(postId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다 post_id=" + postId));
+
+        postMapper.viewsCount(postId);
 
         return entity;
     }

@@ -26,7 +26,7 @@
     </div>
     <div>
         <label for="regDate">작성일</label>
-        <input type="text" id="regDate" name="regDate" class="form-control" th:value="${post.regDate}" readonly>
+        <input type="text" id="regDate" name="regDate" class="form-control" th:value="${#temporals.format(post.regDate,'yyyy-MM-dd HH:mm')}" readonly>
     </div>
     <div>
         <label for="regDate">내용</label>
@@ -36,6 +36,7 @@
 
 
     <hr class="my-4">
+
 
     <div class="comment_group" align="left" style=" width: 100%">
 

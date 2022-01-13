@@ -64,6 +64,14 @@
         ]]>
     </delete>
 
+    <update id="viewsCount" parameterType="Long">
+        <![CDATA[
+        UPDATE post
+        SET views = views+1
+        WHERE post_id = #{postId}
+        ]]>
+    </update>
+
     <update id="updatePost" parameterType="Post">
           <![CDATA[
         UPDATE post

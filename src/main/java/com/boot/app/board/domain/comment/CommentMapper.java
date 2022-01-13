@@ -12,4 +12,5 @@ public interface CommentMapper {
     Comment findByCommentId(Long commentId);
     void deleteComment(Long commentId);
     void updateComment(Comment comment);
+    Long findCommentCount(Long postId);
 }

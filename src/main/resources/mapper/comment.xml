@@ -14,6 +14,14 @@
         ]]>
     </select>
 
+    <select id="findCommentCount" parameterType="Long" resultType="Long">
+          <![CDATA[
+        SELECT COUNT(*)
+        FROM comment
+        WHERE post_id = #{postId}
+        ]]>
+    </select>
+
     <select id="findByCommentId" parameterType="Long" resultType="Comment">
          <![CDATA[
         SELECT *

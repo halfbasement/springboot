@@ -14,6 +14,10 @@ public interface PostMapper {
     void deletePost(Long postId);
     void updatePost(Post post);
 
+    void viewsCount(Long postId);
+
     List<Post> selectPostList(Post post);
     Integer postCount();
+
+
 }

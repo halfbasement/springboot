@@ -19,7 +19,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new LoginCheckInterceptor())
                 .order(1)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/","/post","/post/{postId:^[0-9]+$}","/login","/member/add","/comment/{postId:^[0-9]+$}",
+                .excludePathPatterns("/","/post","/post/{postId:^[0-9]+$}","/login","/member/add","/comment/{postId:^[0-9]+$}","/logout",
                         "/comment/{postId:^[0-9]+$}/addModalInfo", //인터셉터 처리 다시 해야함
                         "/css/**","/*.ico","/js/**","/error");
     }
