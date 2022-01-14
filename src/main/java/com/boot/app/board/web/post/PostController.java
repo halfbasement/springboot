@@ -63,7 +63,7 @@ public class PostController {
     public String savePost(@Validated @ModelAttribute("post") PostSaveDto dto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
         //글로벌오류
-        if (dto.getNumber() == null && !StringUtils.hasText(dto.getTitle()) && !StringUtils.hasText(dto.getAuthor()) && !StringUtils.hasText(dto.getContent())) {
+        if (!StringUtils.hasText(dto.getTitle()) && !StringUtils.hasText(dto.getAuthor()) && !StringUtils.hasText(dto.getContent())) {
             bindingResult.reject("globalError");
         }
 
@@ -80,7 +80,7 @@ public class PostController {
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .author(dto.getAuthor())
-                .number(dto.getNumber())
+           //     .number(dto.getNumber())
                 .memberEmail(dto.getMemberEmail())
                 .build();
 

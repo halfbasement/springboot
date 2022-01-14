@@ -28,13 +28,13 @@ public class PostSaveValidator implements Validator {
             errors.rejectValue("content", "required");
         }
 
-        if (dto.getNumber() == null || dto.getNumber() < 10 || dto.getNumber() > 1000) {
+     /*   if (dto.getNumber() == null || dto.getNumber() < 10 || dto.getNumber() > 1000) {
             log.info("number ={}", dto.getNumber());
             errors.rejectValue("number", "range", new Object[]{10, 1000}, null);
         }
 
         if (dto.getNumber() == null && !StringUtils.hasText(dto.getTitle()) && !StringUtils.hasText(dto.getAuthor()) && !StringUtils.hasText(dto.getContent())) {
             errors.reject("globalError");
-        }
+        }*/
     }
 }
