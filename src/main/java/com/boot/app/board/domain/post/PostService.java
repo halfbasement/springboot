@@ -1,8 +1,12 @@
 package com.boot.app.board.domain.post;
 
+import com.boot.app.board.domain.uploadfile.UploadFile;
+import com.boot.app.board.domain.uploadfile.UploadFileMapper;
+import com.boot.app.board.domain.uploadfile.UploadFileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -12,10 +16,21 @@ import java.util.List;
 public class PostService {
 
     private final PostMapper postMapper;
+    private final UploadFileMapper uploadFileMapper;
 
-    public Long save(Post entity){
+    @Transactional
+    public Long save(Post entity,List<UploadFile> uploadFiles){
 
         postMapper.insertPost(entity);
+
+        if(uploadFiles == null || uploadFiles.size() <=0){
+            return entity.getPostId();
+        }else {
+            uploadFiles.forEach(file -> {
+                file.setPostId(entity.getPostId());
+                uploadFileMapper.insertFile(file);
+            });
+        }
 
         return entity.getPostId();
 

@@ -6,6 +6,25 @@
 
 <head>
     <!--자동추가-->
+    <style>
+        .uploadResult {
+            width: 100%;
+            background-color: gray;
+        }
+        .uploadResult ul{
+            display: flex;
+            flex-flow: row;
+            justify-content: center;
+            align-items: center;
+        }
+        .uploadResult ul li {
+            list-style: none;
+            padding: 10px;
+        }
+        .uploadResult ul lu img{
+            width: 20px;
+        }
+    </style>
 </head>
 <body>
 
@@ -15,7 +34,7 @@
 
 
 
-    <form th:action method="post" th:object="${post}" class="form-horizontal"   enctype="multipart/form-data">
+    <form id="post_save_form" th:action method="post" th:object="${post}" class="form-horizontal"   enctype="multipart/form-data">
 
         <div th:if="${#fields.hasGlobalErrors()}">
             <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">글로벌 오류</p>
@@ -67,12 +86,7 @@
     </form>
 
 
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">파일등록</div>
-                <div class="panel-body">
-                    <div class="form-group uploadDiv">
+                    <div class="uploadDiv">
                         <input type="file" id="uploadFile" name="uploadFile" multiple>
                     </div>
                     <div class="uploadResult">
@@ -80,9 +94,6 @@
 
                         </ul>
                     </div>
-                </div>
-            </div>
-        </div>
 
 
     </div>

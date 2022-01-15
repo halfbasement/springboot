@@ -5,6 +5,7 @@ import com.boot.app.board.domain.comment.CommentService;
 import com.boot.app.board.domain.member.Member;
 import com.boot.app.board.domain.post.Post;
 import com.boot.app.board.domain.post.PostService;
+import com.boot.app.board.domain.uploadfile.UploadFile;
 import com.boot.app.board.web.login.SessionConst;
 import com.boot.app.board.web.post.dto.*;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -76,7 +78,7 @@ public class PostController {
 
 
         // postService.save(dto);
-        Post entity = Post.builder()
+        Post postEntity = Post.builder()
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .author(dto.getAuthor())
@@ -84,7 +86,10 @@ public class PostController {
                 .memberEmail(dto.getMemberEmail())
                 .build();
 
-        Long savePostId = postService.save(entity);
+
+        Long savePostId = postService.save(postEntity,dto.getUploadFiles());
+
+        log.info("savePostId={}",savePostId);
 
         redirectAttributes.addAttribute("postId", savePostId);
         redirectAttributes.addAttribute("status", true);

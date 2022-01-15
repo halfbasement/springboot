@@ -1,4 +1,4 @@
-var file = {
+var uploadFile = {
     init: function (e) {
         var _this = this;
 
@@ -12,10 +12,29 @@ var file = {
 
         $(document).ready(function (e){
 
+            let formObj = $('#post_save_form');
+
             $('#post_submit').on('click',function (e){
                 e.preventDefault();
 
                 console.log("저장버튼클릭")
+
+                let str= "";
+
+                $('.uploadResult li').each(function (i,obj){
+                    let jobj = $(obj);
+                    console.log(jobj);
+
+                    str +="<input type='hidden' name='uploadFiles["+i+"].fileName' value='"+jobj.data("filename")+"'>";
+                    str +="<input type='hidden' name='uploadFiles["+i+"].uuid' value='"+jobj.data("uuid")+"'>";
+                    str +="<input type='hidden' name='uploadFiles["+i+"].path' value='"+jobj.data("path")+"'>";
+                    str +="<input type='hidden' name='uploadFiles["+i+"].fileType' value='"+jobj.data("filetype")+"'>";
+
+
+                });
+
+                formObj.append(str).submit();
+
 
 
 
@@ -24,6 +43,7 @@ var file = {
     },
 
     fileChange : function (){
+
 
         let regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
         let maxSize = 5242880;
@@ -42,11 +62,44 @@ var file = {
             return true;
         }
 
+        const cloneObj = $('.uploadDiv').clone();
 
         $("#uploadFile").on('change',function (e){
 
             console.log("파일 변경")
 
+
+
+            let uploadResult = $('.uploadResult ul');
+
+            function showUploadFile(uploadResultArr){
+                let str ="";
+
+                $(uploadResultArr).each(function (i,obj){
+                    if(!obj.fileType){
+                        let fileCallPath = encodeURIComponent(obj.path +"/"+ obj.uuid +"_"+obj.fileName);
+
+                        str+='<li data-path="'+obj.path+'" data-uuid="'+obj.uuid+'" data-filename="'+obj.fileName+'" data-filetype="'+obj.fileType+'">' +
+                            '<div><a href="/download?fileName='+fileCallPath+'"><img src="../img/default.jpg"> '+obj.fileName+'</a>  '+
+                             "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file'> X   </button></li></div>"
+
+
+
+                    }else{
+                        let fileCallPath = encodeURIComponent(obj.path +"/"+ obj.uuid +"_"+obj.fileName);
+
+                        str += '<li data-path="'+obj.path+'" data-uuid="'+obj.uuid+'" data-filename="'+obj.fileName+'" data-filetype="'+obj.fileType+'">' +
+                            '<img src="/display?fileName='+fileCallPath+'" style="width: 100px;height: 100px" >'+
+                        "<button type='button'  data-file=\'"+fileCallPath+"\' data-type='image'>X</button></li>";
+
+                    }
+                });
+
+                uploadResult.append(str);
+
+            }
+
+            //폼데이터 생성
             let formData = new FormData();
             let inputFile = $("#uploadFile");
             let files =inputFile[0].files;
@@ -64,6 +117,7 @@ var file = {
 
 
 
+
             $.ajax({
                 url:'/uploadAjax',
                 type:'POST',
@@ -72,7 +126,9 @@ var file = {
                 dataType:'json',
                 data:formData,
                 success:function (data){
-                    console.log(data)
+                    console.log(data);
+                  showUploadFile(data);
+              //    $('.uploadDiv').html(cloneObj.html()); //파일 초기화
                 },
                 error:function (data){
                     alert('x')
@@ -82,6 +138,24 @@ var file = {
         })
 
 
+        $('.uploadResult').on('click','button',function (e){
+            let targetFile = $(this).data('file');
+            let type=$(this).data('type');
+            let targetLi = $(this).closest("li");
+            console.log('타겟파일',targetFile);
+
+            $.ajax({
+                url:'/deleteFile',
+                data:{fileName:targetFile,type:type},
+                dataType: "text",
+                type:'post',
+                success:function (data){
+                    alert(data)
+                    targetLi.remove();
+                }
+            })
+
+        })
 
     }
 
@@ -95,4 +169,4 @@ var file = {
 
 
 };
-file.init()
+uploadFile.init()
