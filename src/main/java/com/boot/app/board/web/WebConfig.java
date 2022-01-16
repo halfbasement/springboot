@@ -21,7 +21,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .excludePathPatterns("/","/post","/post/{postId:^[0-9]+$}","/login","/member/add","/comment/{postId:^[0-9]+$}","/logout",
                         //file
-                        "/uploadAjax","/postFile/**","/display","/download",
+                        "/uploadAjax","/file/**","/display","/download",
                         "/comment/{postId:^[0-9]+$}/addModalInfo", //인터셉터 처리 다시 해야함
                         "/css/**","/*.ico","/js/**","/error");
     }

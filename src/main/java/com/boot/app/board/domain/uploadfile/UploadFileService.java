@@ -17,4 +17,10 @@ public class UploadFileService {
 
         return byPostId;
     }
+
+    public int removeFile(Long fileId){
+        int i = uploadFileMapper.deleteFile(fileId);
+
+        return i;
+    }
 }

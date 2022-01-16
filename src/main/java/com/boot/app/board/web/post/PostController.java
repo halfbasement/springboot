@@ -10,6 +10,8 @@ import com.boot.app.board.web.login.SessionConst;
 import com.boot.app.board.web.post.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -18,6 +20,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -98,15 +103,40 @@ public class PostController {
 
     }
 
-    @GetMapping("/{postId}/remove")
-    public String remove(@PathVariable Long postId, @SessionAttribute(name = SessionConst.LOGIN_MEMBER ,required = false)Member member) {
+    @PostMapping("/{postId}/remove")
+    @ResponseBody
+    public ResponseEntity<String> remove(@PathVariable Long postId, @SessionAttribute(name = SessionConst.LOGIN_MEMBER ,required = false)Member member,
+                                 String[] fileName) {
+
 
         Post post = postService.findByPostId(postId);
 
+
+
         if(post.getAuthor().contentEquals(member.getEmail())){
-            postService.deletePost(postId);
+
+
+            if(fileName ==null){
+                postService.deletePost(postId);
+            }else {
+                int deleteNumber = postService.deletePost(postId);
+
+                if (deleteNumber == 1) {
+                    File file;
+                    for (String oneFile : fileName) {
+                        try {
+                            file = new File("c:\\upload\\" + URLDecoder.decode(oneFile, "UTF-8"));
+                            file.delete();
+
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+            }
         }
-        return "redirect:/post";
+        return new ResponseEntity("게시글이 삭제 되었습니다.", HttpStatus.OK);
     }
 
     @GetMapping("/{postId}")

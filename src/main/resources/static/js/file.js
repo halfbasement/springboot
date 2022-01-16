@@ -145,7 +145,7 @@ var uploadFile = {
 
             $.ajax({
                 url:'/deleteFile',
-                data:{fileName:targetFile,type:type},
+                data:{fileName:targetFile},
                 dataType: "text",
                 type:'post',
                 success:function (data){
@@ -163,8 +163,8 @@ var uploadFile = {
         let postId = $('#detail_post_id').val();
         let uploadDetail = $('.uploadDetail ul');
 
-        $.getJSON('/postFile/' + postId, function (data) {
-
+        $.getJSON('/file/' + postId, function (data) {
+            const fileData = new Array(data.length);
 
             console.log(data);
 
@@ -188,18 +188,38 @@ var uploadFile = {
                             "</li>";
 
                     }
-
                     uploadDetail.append(str);
+
+                    let fileCallPath = encodeURIComponent(obj.path +"/"+ obj.uuid +"_"+obj.fileName);
+
+                    fileData[idx] = fileCallPath;
                 })
 
+            $('#post_delete_btn').on('click',function (){
+                $.ajax({
+                    url:'/post/'+postId+'/remove',
+                    data:{fileName:fileData},
+                    traditional : true,//배열넘기기
+                    dataType: "text",
+                    type:'post',
+                    success:function (data){
+                        alert(data)
+                        window.location.href='/post';
+                    }
+                })
+
+            })
 
         })
+
 
     }, //detailForm end
 
     editForm : function (){
 
         let formObj = $('#post_edit_form');
+        let postId = $('#edit_post_id').val();
+
 
         $('#edit_submit').on('click',function (e){
             e.preventDefault();
@@ -212,10 +232,38 @@ var uploadFile = {
                 let jobj = $(obj);
                 console.log(jobj);
 
-                str +="<input type='hidden' name='uploadFiles["+i+"].fileName' value='"+jobj.data("filename")+"'>";
-                str +="<input type='hidden' name='uploadFiles["+i+"].uuid' value='"+jobj.data("uuid")+"'>";
-                str +="<input type='hidden' name='uploadFiles["+i+"].path' value='"+jobj.data("path")+"'>";
-                str +="<input type='hidden' name='uploadFiles["+i+"].fileType' value='"+jobj.data("filetype")+"'>";
+                if(obj){
+
+                    str +="<input type='hidden' name='uploadFiles["+i+"].fileId' value='"+jobj.data("fileid")+"'>";
+                    str +="<input type='hidden' name='uploadFiles["+i+"].fileName' value='"+jobj.data("filename")+"'>";
+                    str +="<input type='hidden' name='uploadFiles["+i+"].uuid' value='"+jobj.data("uuid")+"'>";
+                    str +="<input type='hidden' name='uploadFiles["+i+"].path' value='"+jobj.data("path")+"'>";
+                    str +="<input type='hidden' name='uploadFiles["+i+"].fileType' value='"+jobj.data("filetype")+"'>";
+
+
+                    $.ajax({
+                        url:'/deleteFile',
+                        data:{fileName:jobj.data("filename"),type:jobj.data("filetype")},
+                        dataType: "text",
+                        type:'post',
+                        success:function (data){
+                            console.log("파일 자체 삭제 완료")
+
+                        }
+                    })
+
+                    /*
+                                    $.ajax({
+                                        url:'/file/'+jobj.data("fileid"),
+                                        type:'delete',
+                                        dataType:"text",
+                                        success:function (data){
+                                            console.log("파일 db 삭제 완료")
+                                        }
+                                    })*/
+
+                }
+
 
 
             });
@@ -227,10 +275,9 @@ var uploadFile = {
 
         })
 
-        let postId = $('#edit_post_id').val();
         let uploadResultEdit = $('.uploadResultEdit ul');
 
-        $.getJSON('/postFile/' + postId, function (data) {
+        $.getJSON('/file/' + postId, function (data) {
 
 
             console.log(data);
@@ -241,7 +288,7 @@ var uploadFile = {
                 if(!obj.fileType){
                     let fileCallPath = encodeURIComponent(obj.path +"/"+ obj.uuid +"_"+obj.fileName);
 
-                    str+='<li data-path="'+obj.path+'" data-uuid="'+obj.uuid+'" data-filename="'+obj.fileName+'" data-filetype="'+obj.fileType+'">' +
+                    str+='<li data-fileid="'+obj.fileId+'" data-path="'+obj.path+'" data-uuid="'+obj.uuid+'" data-filename="'+obj.fileName+'" data-filetype="'+obj.fileType+'">' +
                         '<div><a href="/download?fileName='+fileCallPath+'"><img src="../img/default.jpg"> '+obj.fileName+'</a>  '+
                         "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file'> X   </button></li></div>"
 
@@ -250,7 +297,7 @@ var uploadFile = {
                 }else{
                     let fileCallPath = encodeURIComponent(obj.path +"/"+ obj.uuid +"_"+obj.fileName);
 
-                    str += '<li data-path="'+obj.path+'" data-uuid="'+obj.uuid+'" data-filename="'+obj.fileName+'" data-filetype="'+obj.fileType+'">' +
+                    str += '<li data-fileid="'+obj.fileId+'"   data-path="'+obj.path+'" data-uuid="'+obj.uuid+'" data-filename="'+obj.fileName+'" data-filetype="'+obj.fileType+'">' +
                         '<img src="/display?fileName='+fileCallPath+'" style="width: 100px;height: 100px" >'+
                         "<button type='button'  data-file=\'"+fileCallPath+"\' data-type='image'>X</button></li>";
 

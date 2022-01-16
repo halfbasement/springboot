@@ -12,8 +12,8 @@
         ]]>
     </insert>
 
-    <delete id="deleteFile">
-        delete from file where uuid = #{uuid}
+    <delete id="deleteFile" parameterType="Long">
+        delete from file where file_id = #{fileId}
     </delete>
 
     <select id="findByPostId" resultType="UploadFile">

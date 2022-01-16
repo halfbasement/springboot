@@ -5,9 +5,14 @@ import com.boot.app.board.domain.uploadfile.UploadFileMapper;
 import com.boot.app.board.domain.uploadfile.UploadFileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
 
 @Slf4j
@@ -68,11 +73,12 @@ public class PostService {
 
         return entity;
     }
-    public void deletePost(Long postId){
+    public int deletePost(Long postId){
         postMapper.findByPostId(postId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다 post_id=" + postId));
 
-        postMapper.deletePost(postId);
+       return postMapper.deletePost(postId);
+
     }
 
     public void updatePost(Post entity, Long postId){

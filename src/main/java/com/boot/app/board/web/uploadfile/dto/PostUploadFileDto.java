@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class PostUploadFileDto {
 
 
+    private Long fileId;
     private String fileName;
     private String path;
     private String uuid;

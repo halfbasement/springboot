@@ -63,8 +63,8 @@ public class UploadFileController {
 
             PostUploadFileDto postUploadFileDto = new PostUploadFileDto();
 
-            log.info("upload file 이름 :",multipartFile.getOriginalFilename());
-            log.info("upload file 사이즈 : ",multipartFile.getSize());
+            log.info("upload file 이름 :{}",multipartFile.getOriginalFilename());
+            log.info("upload file 사이즈 :{} ",multipartFile.getSize());
 
             String uploadFileName = multipartFile.getOriginalFilename();
 
@@ -174,7 +174,7 @@ public class UploadFileController {
 
     @PostMapping("/deleteFile")
     public ResponseEntity<String> deleteFile(String fileName,String type){
-        log.info("deleteFile" + fileName);
+        log.info("fileName={}" , fileName);
 
         File file;
 
@@ -189,21 +189,46 @@ public class UploadFileController {
         return new ResponseEntity<String>("삭제되었습니다.",HttpStatus.OK);
     }
 
-    @GetMapping("/postFile/{postId}")
+
+    @GetMapping("/file/{postId}")
     public ResponseEntity<List<PostUploadFileDto>> detailFile(@PathVariable Long postId){
 
 
         List<UploadFile> byPostIdFile = uploadFileService.findByPostIdFile(postId);
 
         List<PostUploadFileDto> result = byPostIdFile.stream()
-                .map(f -> new PostUploadFileDto(f.getFileName(), f.getPath(), f.getUuid(), f.isFileType()))
+                .map(f -> new PostUploadFileDto(f.getFileId(),f.getFileName(), f.getPath(), f.getUuid(), f.isFileType()))
                 .collect(Collectors.toList());
 
 
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
+    @DeleteMapping("/file/{fileId}")
+    public ResponseEntity delete(@PathVariable Long fileId,String fileName){
 
+        int i = uploadFileService.removeFile(fileId);
+
+
+
+        File file;
+
+        if(i == 1){
+            try{
+                file = new File("c:\\upload\\" + URLDecoder.decode(fileName,"UTF-8"));
+                file.delete();
+
+            }catch (UnsupportedEncodingException e){
+                e.printStackTrace();
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+        }
+
+
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 
 }
