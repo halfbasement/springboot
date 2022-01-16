@@ -7,6 +7,26 @@
 <head>
 
     <!--자동추가-->
+
+    <style>
+        .uploadDetail {
+            width: 100%;
+            background-color: gray;
+        }
+        .uploadDetail ul{
+            display: flex;
+            flex-flow: row;
+            justify-content: center;
+            align-items: center;
+        }
+        .uploadDetail ul li {
+            list-style: none;
+            padding: 10px;
+        }
+        .uploadDetail ul lu img{
+            width: 20px;
+        }
+    </style>
 </head>
 <body>
 
@@ -33,6 +53,16 @@
         <textarea name="content" class="form-control" readonly>[[${post.content}]]</textarea>
     </div>
     <input type="hidden" id="detail_post_id" th:value="${post.postId}"/>
+
+
+    <div>파일 목록</div>
+    <div class="uploadDetail">
+
+        <ul>
+
+        </ul>
+    </div>
+
 
 
     <hr class="my-4">

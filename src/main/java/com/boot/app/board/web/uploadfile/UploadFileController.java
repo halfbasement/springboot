@@ -1,8 +1,10 @@
 package com.boot.app.board.web.uploadfile;
 
 import com.boot.app.board.domain.uploadfile.UploadFile;
+import com.boot.app.board.domain.uploadfile.UploadFileService;
 import com.boot.app.board.web.uploadfile.dto.PostUploadFileDto;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import net.coobird.thumbnailator.Thumbnailator;
@@ -13,10 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -32,10 +31,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.RecursiveTask;
+import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
+@RequiredArgsConstructor
 public class UploadFileController {
+
+
+    private final UploadFileService uploadFileService;
 
     @PostMapping("/uploadAjax")
     public ResponseEntity<List<PostUploadFileDto>> uploadAjaxPost(MultipartFile[] uploadFile){
@@ -185,6 +189,19 @@ public class UploadFileController {
         return new ResponseEntity<String>("삭제되었습니다.",HttpStatus.OK);
     }
 
+    @GetMapping("/postFile/{postId}")
+    public ResponseEntity<List<PostUploadFileDto>> detailFile(@PathVariable Long postId){
+
+
+        List<UploadFile> byPostIdFile = uploadFileService.findByPostIdFile(postId);
+
+        List<PostUploadFileDto> result = byPostIdFile.stream()
+                .map(f -> new PostUploadFileDto(f.getFileName(), f.getPath(), f.getUuid(), f.isFileType()))
+                .collect(Collectors.toList());
+
+
+        return new ResponseEntity<>(result,HttpStatus.OK);
+    }
 
 
 
