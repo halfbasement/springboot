@@ -204,31 +204,6 @@ public class UploadFileController {
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
-    @DeleteMapping("/file/{fileId}")
-    public ResponseEntity delete(@PathVariable Long fileId,String fileName){
-
-        int i = uploadFileService.removeFile(fileId);
-
-
-
-        File file;
-
-        if(i == 1){
-            try{
-                file = new File("c:\\upload\\" + URLDecoder.decode(fileName,"UTF-8"));
-                file.delete();
-
-            }catch (UnsupportedEncodingException e){
-                e.printStackTrace();
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-
-        }
-
-
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 
 
 }

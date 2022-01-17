@@ -234,33 +234,13 @@ var uploadFile = {
 
                 if(obj){
 
-                    str +="<input type='hidden' name='uploadFiles["+i+"].fileId' value='"+jobj.data("fileid")+"'>";
+                   // str +="<input type='hidden' name='uploadFiles["+i+"].fileId' value='"+jobj.data("fileid")+"'>";
                     str +="<input type='hidden' name='uploadFiles["+i+"].fileName' value='"+jobj.data("filename")+"'>";
                     str +="<input type='hidden' name='uploadFiles["+i+"].uuid' value='"+jobj.data("uuid")+"'>";
                     str +="<input type='hidden' name='uploadFiles["+i+"].path' value='"+jobj.data("path")+"'>";
                     str +="<input type='hidden' name='uploadFiles["+i+"].fileType' value='"+jobj.data("filetype")+"'>";
 
 
-                    $.ajax({
-                        url:'/deleteFile',
-                        data:{fileName:jobj.data("filename"),type:jobj.data("filetype")},
-                        dataType: "text",
-                        type:'post',
-                        success:function (data){
-                            console.log("파일 자체 삭제 완료")
-
-                        }
-                    })
-
-                    /*
-                                    $.ajax({
-                                        url:'/file/'+jobj.data("fileid"),
-                                        type:'delete',
-                                        dataType:"text",
-                                        success:function (data){
-                                            console.log("파일 db 삭제 완료")
-                                        }
-                                    })*/
 
                 }
 
@@ -290,11 +270,12 @@ var uploadFile = {
 
                     str+='<li data-fileid="'+obj.fileId+'" data-path="'+obj.path+'" data-uuid="'+obj.uuid+'" data-filename="'+obj.fileName+'" data-filetype="'+obj.fileType+'">' +
                         '<div><a href="/download?fileName='+fileCallPath+'"><img src="../img/default.jpg"> '+obj.fileName+'</a>  '+
-                        "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file'> X   </button></li></div>"
+                        "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file'> X   </button></div></li>"
 
 
 
                 }else{
+
                     let fileCallPath = encodeURIComponent(obj.path +"/"+ obj.uuid +"_"+obj.fileName);
 
                     str += '<li data-fileid="'+obj.fileId+'"   data-path="'+obj.path+'" data-uuid="'+obj.uuid+'" data-filename="'+obj.fileName+'" data-filetype="'+obj.fileType+'">' +

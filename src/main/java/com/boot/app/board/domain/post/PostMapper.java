@@ -12,7 +12,7 @@ public interface PostMapper {
     Optional<Post> findByPostId(Long postId);
     Long insertPost(Post post);
     int deletePost(Long postId);
-    void updatePost(Post post);
+    int updatePost(Post post);
 
     void viewsCount(Long postId);
 

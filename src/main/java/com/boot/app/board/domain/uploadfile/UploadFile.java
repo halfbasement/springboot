@@ -5,6 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -18,6 +22,16 @@ public class UploadFile {
     private boolean fileType;
 
     private Long postId;
+
+
+    public String getImageUrl(){
+        try{
+            return URLEncoder.encode(path+"/"+uuid+"_"+fileName,"UTF-8");
+        }catch (UnsupportedEncodingException e){
+            e.printStackTrace();
+        }
+        return "";
+    }
 
 
     public UploadFile(String uuid, String path, String fileName, boolean fileType) {

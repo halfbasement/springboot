@@ -18,8 +18,12 @@ public class UploadFileService {
         return byPostId;
     }
 
-    public int removeFile(Long fileId){
-        int i = uploadFileMapper.deleteFile(fileId);
+    public int editFile(Long postId){
+
+        //먼저 모든 파일 삭제하고
+        int i = uploadFileMapper.deleteByPostId(postId);
+
+
 
         return i;
     }

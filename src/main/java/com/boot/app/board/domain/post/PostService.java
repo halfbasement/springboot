@@ -81,11 +81,26 @@ public class PostService {
 
     }
 
-    public void updatePost(Post entity, Long postId){
-        postMapper.findByPostId(postId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다 post_id=" + postId));
+    @Transactional
+    public int updatePost(Post entity, Long postId ,List<UploadFile> uploadFiles ){
 
-        postMapper.updatePost(entity);
+        if(uploadFiles==null || uploadFiles.size()<=0){
+
+            uploadFileMapper.deleteByPostId(postId);
+            return   postMapper.updatePost(entity);
+        }else{
+
+            Integer i = uploadFileMapper.deleteByPostId(postId);
+
+            if(i != null){
+                uploadFiles.forEach(file -> {
+                    file.setPostId(entity.getPostId());
+                    uploadFileMapper.insertFile(file);
+                });
+            }
+
+            return postMapper.updatePost(entity);
+        }
 
     }
 }

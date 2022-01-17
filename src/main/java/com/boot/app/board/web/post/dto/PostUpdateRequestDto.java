@@ -1,6 +1,7 @@
 package com.boot.app.board.web.post.dto;
 
 import com.boot.app.board.domain.post.Post;
+import com.boot.app.board.domain.uploadfile.UploadFile;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,6 +10,7 @@ import javax.validation.constraints.NotBlank;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Getter
@@ -23,6 +25,9 @@ public class PostUpdateRequestDto {
     private String content;
     private String author;
     private LocalDateTime regDate;
+
+    private List<UploadFile> uploadFiles;
+
 
     public PostUpdateRequestDto(Post entity) {
         this.postId = entity.getPostId();
