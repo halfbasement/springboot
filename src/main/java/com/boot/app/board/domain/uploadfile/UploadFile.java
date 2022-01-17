@@ -24,7 +24,7 @@ public class UploadFile {
     private Long postId;
 
 
-    public String getImageUrl(){
+    public String getFileUrl(){
         try{
             return URLEncoder.encode(path+"/"+uuid+"_"+fileName,"UTF-8");
         }catch (UnsupportedEncodingException e){

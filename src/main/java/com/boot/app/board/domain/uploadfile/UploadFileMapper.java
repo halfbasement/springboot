@@ -10,4 +10,5 @@ public interface UploadFileMapper {
     void insertFile(UploadFile uploadFile);
     List<UploadFile> findByPostId(Long postId);
     int deleteByPostId(Long postId);
+    List<UploadFile> oldFileByPath();
 }

@@ -1,13 +1,16 @@
-package com.boot.app.board.web.common.schedule;
+package com.boot.app.board.domain;
 
 import com.boot.app.board.domain.uploadfile.UploadFile;
 import com.boot.app.board.domain.uploadfile.UploadFileMapper;
 import com.boot.app.board.domain.uploadfile.UploadFileService;
+import groovy.util.logging.Slf4j;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -15,9 +18,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
-public class PostFileSchedule {
 
+@SpringBootTest
+public class UploadMapperTest {
     @Autowired
     UploadFileMapper uploadFileMapper;
 
@@ -31,17 +34,19 @@ public class PostFileSchedule {
 
         String str = sdf.format(cal.getTime());
 
-        return str.replace("-", File.separator);
+        return str.replace("-",File.separator);
     }
 
-
-    @Scheduled(cron = "0 0 1 * * *") //새벽한시마다 실행
-    public void PostFileDelete(){
+    @Test
+    void test(){
 
         //어제자 파일 DB목록을 받아오고
         List<UploadFile> uploadFiles = uploadFileMapper.oldFileByPath();
 
 
+        for (UploadFile uploadFile : uploadFiles) {
+            System.out.println("uploadFile = " + uploadFile.getFileName());
+        }
 
 
         //비교를 위해 Path타입으로 변환
@@ -60,6 +65,7 @@ public class PostFileSchedule {
             file.delete();
 
         }
+
 
 
 

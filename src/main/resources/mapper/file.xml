@@ -20,4 +20,12 @@
     <select id="findByPostId" resultType="UploadFile">
         select * from file where post_id=#{postId}
     </select>
+
+    <select id="oldFileByPath" resultType="UploadFile">
+        <![CDATA[
+        SELECT *
+        FROM file
+        where path = DATE_FORMAT(DATE_ADD(NOW(), INTERVAL -1 DAY), '%Y\%m\%d');
+        ]]>
+    </select>
 </mapper>

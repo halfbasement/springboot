@@ -18,13 +18,10 @@ public class UploadFileService {
         return byPostId;
     }
 
-    public int editFile(Long postId){
+    public List<UploadFile> oldFile(){
+        List<UploadFile> uploadFiles = uploadFileMapper.oldFileByPath();
 
-        //먼저 모든 파일 삭제하고
-        int i = uploadFileMapper.deleteByPostId(postId);
-
-
-
-        return i;
+        return uploadFiles;
     }
+
 }
