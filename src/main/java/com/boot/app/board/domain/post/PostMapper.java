@@ -2,6 +2,7 @@ package com.boot.app.board.domain.post;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,7 +17,7 @@ public interface PostMapper {
 
     void viewsCount(Long postId);
 
-    List<Post> selectPostList(Post post);
+    List<Post> selectPostList(HashMap data);
     Integer postCount();
 
 

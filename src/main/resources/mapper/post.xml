@@ -22,12 +22,12 @@
     </select>
 
 
-    <select id="selectPostList" parameterType="Post" resultType="Post">
+    <select id="selectPostList" parameterType="hashMap" resultType="Post">
     <![CDATA[
         SELECT *
         FROM post
         ORDER BY post_id DESC, reg_date DESC
-            LIMIT #{startPage}, #{recordsPerPage}
+            LIMIT #{displayPost}, #{postNum}
         ]]>
     </select>
 

@@ -3,6 +3,7 @@ package com.boot.app.board.web.post;
 import com.boot.app.board.domain.comment.Comment;
 import com.boot.app.board.domain.comment.CommentService;
 import com.boot.app.board.domain.member.Member;
+import com.boot.app.board.domain.post.Page;
 import com.boot.app.board.domain.post.Post;
 import com.boot.app.board.domain.post.PostService;
 import com.boot.app.board.domain.uploadfile.UploadFile;
@@ -37,19 +38,27 @@ public class PostController {
     private final CommentService commentService;
 
     @GetMapping()
-    public String posts(@ModelAttribute("page") Post post, Model model) {
+    public String posts(/*@ModelAttribute("page") Post post,*/ @RequestParam(value = "num",required = false) Integer num, Model model) {
 
 
-        /*log.info("count={}", postService.pageCount());
-        Integer pageCount = postService.pageCount();
+
+        Page page = new Page();
 
 
-        post.setMaxPage(pageCount);
-*/
+        // 총 페이지 갯수
+        Integer count = postService.pageCount();
 
-        List<Post> posts = postService.postPageList(post);
+        page.setNum(num);
+        page.setCount(count);
+
+
+
+        List<Post> posts = postService.postPageList(page.getDisplayPost(), page.getPostNum());
 
         model.addAttribute("posts", posts);
+        model.addAttribute("page", page);
+        //현재 페이지
+        model.addAttribute("select",num);
         return "post/post_list";
     }
 

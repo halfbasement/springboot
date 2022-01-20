@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class Common extends Criteria {
+public class Common  {
 
 
     private LocalDateTime regDate;

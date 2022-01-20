@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.stream.IntStream;
+
 @SpringBootTest
 public class pageTest {
 
@@ -14,6 +16,23 @@ public class pageTest {
 
     @Test
     void insertPost(){
+
+
+        IntStream.rangeClosed(1,200).forEach(i->{
+
+
+            Post post = Post.builder()
+                    .title("test제목"+i)
+                    .content("test내용"+i)
+                    .author("test@test.com")
+                    .memberEmail("test@test.com")
+                    .build();
+
+            postService.save(post,null);
+
+                }
+
+        );
 
 
     }

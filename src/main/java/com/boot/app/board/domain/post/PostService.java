@@ -13,7 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -47,8 +49,13 @@ public class PostService {
         return entities;
     }
 
-    public List<Post> postPageList(Post post){
-        List<Post> posts = postMapper.selectPostList(post);
+    public List<Post> postPageList(int displayPost,  int postNum){
+
+        HashMap data = new HashMap();
+        data.put("displayPost",displayPost);
+        data.put("postNum",postNum);
+
+        List<Post> posts = postMapper.selectPostList(data);
         return posts;
     }
 
@@ -57,10 +64,8 @@ public class PostService {
 
 
         Integer postCount = postMapper.postCount();
-        Integer ceil = (int)Math.ceil(postCount / 20.0);
-        System.out.println("ceil = " + ceil);
 
-        return ceil;
+        return postCount;
     }
 
 
