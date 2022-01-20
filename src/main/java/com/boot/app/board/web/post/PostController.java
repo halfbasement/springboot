@@ -40,12 +40,12 @@ public class PostController {
     public String posts(@ModelAttribute("page") Post post, Model model) {
 
 
-        log.info("count={}", postService.pageCount());
+        /*log.info("count={}", postService.pageCount());
         Integer pageCount = postService.pageCount();
 
 
         post.setMaxPage(pageCount);
-
+*/
 
         List<Post> posts = postService.postPageList(post);
 
