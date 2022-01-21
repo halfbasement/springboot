@@ -14,6 +14,9 @@
 
 ## DB 모델링
 
+![model](https://user-images.githubusercontent.com/96690643/150556293-212d794e-a80a-4857-9e19-f4dcf53313d0.PNG)
+
+
 
 ## 기타 설명<br>
 
