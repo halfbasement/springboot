@@ -21,10 +21,13 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -38,15 +41,19 @@ public class PostController {
     private final CommentService commentService;
 
     @GetMapping()
-    public String posts(/*@ModelAttribute("page") Post post,*/ @RequestParam(value = "num",required = false) Integer num, Model model) {
-
+    public String posts(/*@ModelAttribute("page") Post post,*/ @RequestParam(value = "num",required = false,defaultValue = "1") Integer num, Model model) {
 
 
         Page page = new Page();
 
 
+
+
         // 총 페이지 갯수
         Integer count = postService.pageCount();
+
+
+
 
         page.setNum(num);
         page.setCount(count);
@@ -109,8 +116,12 @@ public class PostController {
 
     @PostMapping("/{postId}/remove")
     @ResponseBody
-    public ResponseEntity<String> remove(@PathVariable Long postId, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member,
-                                         String[] fileName) {
+    public ResponseEntity remove(@PathVariable Long postId, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member, HttpServletRequest request,
+                                      String[] fileName) {
+
+
+
+
 
 
         Post post = postService.findByPostId(postId);
@@ -139,11 +150,19 @@ public class PostController {
                 }
             }
         }
-        return new ResponseEntity("게시글이 삭제 되었습니다.", HttpStatus.OK);
+
+
+        return new ResponseEntity("게시글이 삭제되었습니다", HttpStatus.OK);
     }
 
     @GetMapping("/{postId}")
-    public String post(@PathVariable Long postId, Model model, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
+    public String post(@PathVariable Long postId, Model model, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member,
+                       HttpServletRequest request) {
+
+        String prevPage = request.getHeader("REFERER");
+
+
+        System.out.println("prevPage = " + prevPage);
 
         Post entity = postService.findByPostId(postId);
         PostDetailDto post = new PostDetailDto(entity);
@@ -151,6 +170,7 @@ public class PostController {
 
         model.addAttribute("post", post);
         model.addAttribute("member", member);
+        model.addAttribute("prevPage",prevPage);
         return "post/post_detail";
     }
 

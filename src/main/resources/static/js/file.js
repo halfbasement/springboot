@@ -18,13 +18,11 @@ var uploadFile = {
             $('#post_submit').on('click',function (e){
                 e.preventDefault();
 
-                console.log("저장버튼클릭")
 
                 let str= "";
 
                 $('.uploadResult li').each(function (i,obj){
                     let jobj = $(obj);
-                    console.log(jobj);
 
                     str +="<input type='hidden' name='uploadFiles["+i+"].fileName' value='"+jobj.data("filename")+"'>";
                     str +="<input type='hidden' name='uploadFiles["+i+"].uuid' value='"+jobj.data("uuid")+"'>";
@@ -65,7 +63,6 @@ var uploadFile = {
 
         $("#uploadFile").on('change',function (e){
 
-            console.log("파일 변경")
 
 
 
@@ -103,7 +100,6 @@ var uploadFile = {
             let inputFile = $("#uploadFile");
             let files =inputFile[0].files;
 
-            console.log(files)
 
             for(let i=0; i< files.length; i++){
 
@@ -125,7 +121,6 @@ var uploadFile = {
                 dataType:'json',
                 data:formData,
                 success:function (data){
-                    console.log(data);
                     showUploadFile(data);
                     //    $('.uploadDiv').html(cloneObj.html()); //파일 초기화
                 },
@@ -141,7 +136,6 @@ var uploadFile = {
             let targetFile = $(this).data('file');
             let type=$(this).data('type');
             let targetLi = $(this).closest("li");
-            console.log('타겟파일',targetFile);
 
             $.ajax({
                 url:'/deleteFile',
@@ -166,7 +160,6 @@ var uploadFile = {
         $.getJSON('/file/' + postId, function (data) {
             const fileData = new Array(data.length);
 
-            console.log(data);
 
                 $.each(data, function (idx, obj) {
                     let str ="";
@@ -204,7 +197,8 @@ var uploadFile = {
                     type:'post',
                     success:function (data){
                         alert(data)
-                        window.location.href='/post';
+
+                        window.location.href='/';
                     }
                 })
 
@@ -224,13 +218,11 @@ var uploadFile = {
         $('#edit_submit').on('click',function (e){
             e.preventDefault();
 
-            console.log("저장버튼클릭")
 
             let str= "";
 
             $('.uploadResultEdit li').each(function (i,obj){
                 let jobj = $(obj);
-                console.log(jobj);
 
                 if(obj){
 
@@ -260,7 +252,6 @@ var uploadFile = {
         $.getJSON('/file/' + postId, function (data) {
 
 
-            console.log(data);
 
             $.each(data, function (idx, obj) {
                 let str ="";
@@ -322,7 +313,6 @@ var uploadFile = {
 
 
 
-            console.log("파일 변경")
 
 
 
@@ -360,7 +350,6 @@ var uploadFile = {
             let inputFile = $("#uploadFileEdit");
             let files = inputFile[0].files;
 
-            console.log(files)
 
             for(let i=0; i< files.length; i++){
 
@@ -382,7 +371,6 @@ var uploadFile = {
                 dataType:'json',
                 data:formData,
                 success:function (data){
-                    console.log(data);
                     showUploadFile(data);
                     //    $('.uploadDiv').html(cloneObj.html()); //파일 초기화
                 },

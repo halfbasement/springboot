@@ -115,7 +115,7 @@
 
         <div class="col" >
             <button class="w-100 btn btn-secondary btn-lg"
-                    th:onclick="|location.href='@{/post(num=${1})}'|"
+                    th:onclick="|location.href='@{${prevPage}}'|"
                     type="button">목록으로
             </button>
         </div>

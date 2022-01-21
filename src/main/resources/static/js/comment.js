@@ -245,7 +245,6 @@ var comment = {
         if (url) {
 
             $.getJSON('/comment/' + url, function (data) {
-                console.log(data);
 
                 if(data.sub && data.main == false) //데이터가 없으면
                 {
