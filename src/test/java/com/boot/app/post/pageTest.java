@@ -14,11 +14,11 @@ public class pageTest {
     @Autowired
     PostService postService;
 
-    @Test
+  /*  @Test
     void insertPost(){
 
 
-        IntStream.rangeClosed(1,200).forEach(i->{
+       *//* IntStream.rangeClosed(1,200).forEach(i->{
 
 
             Post post = Post.builder()
@@ -32,12 +32,12 @@ public class pageTest {
 
                 }
 
-        );
+        );*//*
 
 
-    }
+    }*/
 
-
+/*
     @Test
     void pageTest(){
 
@@ -46,5 +46,5 @@ public class pageTest {
 
 
 
-    }
+    }*/
 }

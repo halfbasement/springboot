@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 @SpringBootTest
 public class UploadMapperTest {
-    @Autowired
+    /*@Autowired
     UploadFileMapper uploadFileMapper;
 
 
@@ -69,5 +69,5 @@ public class UploadMapperTest {
 
 
 
-    }
+    }*/
 }
